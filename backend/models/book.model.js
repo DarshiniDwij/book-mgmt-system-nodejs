@@ -30,6 +30,12 @@ module.exports = (sequelize, Sequelize, DataTypes) => {
         price: {
             type: DataTypes.DECIMAL(8,2)
         },
+        description: {
+            type: DataTypes.TEXT
+        },
+        // imagePath: {
+        //     type: DataTypes.STRING
+        //   },
         created_at: {
           allowNull: false,
           type: DataTypes.DATE

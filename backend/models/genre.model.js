@@ -2,13 +2,13 @@ module.exports = (sequelize, Sequelize, DataTypes) => {
 
     const Author = sequelize.define(
         "genre",{
-            id: {
+            genre_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true
               },
-              name: {
+              genre_name: {
                 type: DataTypes.STRING
               }
         }

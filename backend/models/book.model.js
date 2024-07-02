@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize, DataTypes) => {
       "book", // Model name
       {
         // Model attributes
-        id: {
+        book_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
           autoIncrement: true,

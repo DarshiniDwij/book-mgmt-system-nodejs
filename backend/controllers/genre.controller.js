@@ -2,11 +2,12 @@ const db = require("../models");
 const Genre = db.genre;
 const Op = db.Op;
 
-
+console.log("enter genre controller1")
 //create and save new Genre
 
-exports.create = (req, res) => {
+const create = async(req, res) => {
 
+  console.log("enter genre controller2")
     //Validate request
     if (!req.body.genre_name) {
       res.status(400).send({
@@ -17,11 +18,11 @@ exports.create = (req, res) => {
   
     //create a new Genre
     const genre = {
-        genre_name : req.body.genre_name,
+        genre_name : req.body.genre_name
     };
 
     //save Genre in database
-    Genre.create(genre)
+    await Genre.create(genre)
     .then(data => {
         res.send(data);
       })
@@ -34,11 +35,11 @@ exports.create = (req, res) => {
 
 
 // Retrieve all Genre from the database.
-exports.findAll = (req, res) => {
+const findAll = async(req, res) => {
     const genre_name = req.query.genre_name;
     var condition = genre_name ? { genre_name: { [Op.like]: `%${genre_name}%` } } : null;
   
-    Genre.findAll({ where: condition })
+    await Genre.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
@@ -51,10 +52,10 @@ exports.findAll = (req, res) => {
 
 
   // Find a single Genre with an id
-exports.findOne = (req, res) => {
+const findOne = async(req, res) => {
     const genre_id = req.params.genre_id;
   
-    Genre.findByPk(genre_id)
+    await Genre.findByPk(genre_id)
       .then(data => {
         res.send(data);
       })
@@ -64,3 +65,7 @@ exports.findOne = (req, res) => {
         });
       });
   };
+
+  module.exports = {
+    create,findAll,findOne
+};

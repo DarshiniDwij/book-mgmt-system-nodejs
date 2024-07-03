@@ -3,7 +3,7 @@ const Book = db.books;
 const Op = db.Op;
 
 // Create and Save a new Book
-exports.create = (req, res) => {
+const createBook = async(req, res) => {
     // Validate request
     if (!req.body.title) {
       res.status(400).send({
@@ -25,7 +25,7 @@ exports.create = (req, res) => {
     };
   
     // Save Book in database
-    Book.create(book)
+    await Book.create(book)
       .then(data => {
         res.send(data);
       })
@@ -37,11 +37,11 @@ exports.create = (req, res) => {
   };
 
   // Retrieve all Books from the database.
-exports.findAll = (req, res) => {
+const findAllBooks = async(req, res) => {
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
   
-    Book.findAll({ where: condition })
+    await Book.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
@@ -53,10 +53,10 @@ exports.findAll = (req, res) => {
   };
 
   // Find a single Book with an id
-exports.findOne = (req, res) => {
+const findBook = async(req, res) => {
     const book_id = req.params.book_id;
   
-    Book.findByPk(book_id)
+    await Book.findByPk(book_id)
       .then(data => {
         res.send(data);
       })
@@ -69,10 +69,10 @@ exports.findOne = (req, res) => {
 
 
   // Update a Book by the id in the request
-exports.update = (req, res) => {
+const update = async(req, res) => {
     const book_id = req.params.book_id;
   
-    Book.update(req.body, {
+    await Book.update(req.body, {
       where: { book_id: book_id }
     })
       .then(num => {
@@ -95,10 +95,10 @@ exports.update = (req, res) => {
 
 
   // Delete a Book with the specified id in the request
-exports.delete = (req, res) => {
+const deleteBook = async(req, res) => {
     const book_id = req.params.book_id;
   
-    Book.destroy({
+    await Book.destroy({
       where: { book_id: book_id }
     })
       .then(num => {
@@ -121,8 +121,8 @@ exports.delete = (req, res) => {
 
 
   // Delete all Books from the database.
-exports.deleteAll = (req, res) => {
-    Book.destroy({
+const deleteAll = async(req, res) => {
+    await Book.destroy({
       where: {},
       truncate: false
     })
@@ -137,8 +137,8 @@ exports.deleteAll = (req, res) => {
   };
   
   // Find all published Books
-  exports.findAllPublished = (req, res) => {
-    Book.findAll({ where: { published: true } })
+const findAllPublished = async(req, res) => {
+    await Book.findAll({ where: { published: true } })
       .then(data => {
         res.send(data);
       })
@@ -148,4 +148,8 @@ exports.deleteAll = (req, res) => {
         });
       });
   };
+
+  module.exports = {
+    findAllPublished,deleteAll,deleteBook,update,findBook,findAllBooks,createBook
+};
   

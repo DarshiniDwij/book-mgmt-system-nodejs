@@ -4,7 +4,7 @@ const Op = db.Op;
 
 //create and save new author
 
-exports.create = (req, res) => {
+const create = async(req, res) => {
 
   console.log("creating user")
 
@@ -23,7 +23,7 @@ exports.create = (req, res) => {
     };
 
     //save author in database
-    Author.create(author)
+    await Author.create(author)
     .then(data => {
         res.send(data);
       })
@@ -35,11 +35,11 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Authors from the database.
-exports.findAll = (req, res) => {
+const findAll = async(req, res) => {
     const name = req.query.name;
     var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
   
-    Author.findAll({ where: condition })
+    await Author.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
@@ -51,10 +51,10 @@ exports.findAll = (req, res) => {
   };
 
     // Find a single author with an id
-exports.findOne = (req, res) => {
+const findOne = async(req, res) => {
     const author_id = req.params.author_id;
   
-    Author.findByPk(author_id)
+    await Author.findByPk(author_id)
       .then(data => {
         res.send(data);
       })
@@ -66,10 +66,10 @@ exports.findOne = (req, res) => {
   };
 
   // Update a Author by the id in the request
-exports.update = (req, res) => {
+const update = async(req, res) => {
     const author_id = req.params.author_id;
   
-    Author.update(req.body, {
+    await Author.update(req.body, {
       where: { author_id: author_id }
     })
       .then(num => {
@@ -92,10 +92,10 @@ exports.update = (req, res) => {
 
 
   // Delete a Author with the specified id in the request
-exports.delete = (req, res) => {
+const deleteAuthor = async(req, res) => {
     const author_id = req.params.author_id;
   
-    Author.destroy({
+    await Author.destroy({
       where: { author_id: author_id }
     })
       .then(num => {
@@ -115,3 +115,7 @@ exports.delete = (req, res) => {
         });
       });
   };
+
+  module.exports = {
+    create,findAll,findOne,update,deleteAuthor
+};

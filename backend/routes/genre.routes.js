@@ -1,18 +1,18 @@
-module.exports = app => {
+const express = require('express')
+const router = express.Router();
 
-    const genreController = require("../controllers/genre.controller.js")
+const genreController = require("../controllers/genre.controller.js")
 
-    const router = require("express").Router();
+console.log("enter genre *****")
+// Create a new Genre
+router.post("/createGenre", genreController.create);
 
-     // Create a new Genre
-     router.post("/", genreController.create);
-  
-     // Retrieve all Genre
-     router.get("/", genreController.findAll);
-
-
-      // Retrieve a single Genre with id
-    router.get("/:genre_id", genreController.findOne);
+// Retrieve all Genre
+router.get("/genres", genreController.findAll);
 
 
-};
+// Retrieve a single Genre with id
+router.get("/:genre_id", genreController.findOne);
+
+
+module.exports = router;

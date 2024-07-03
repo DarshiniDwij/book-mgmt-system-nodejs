@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./models");
 
 db.sequelize.sync().then(() => {
-    initial(); 
+    // initial(); 
   });
 
   // simple route
@@ -26,10 +26,16 @@ app.get("/", (req, res) => {
   });
 
 
-  // api routes
-  require("./routes/book.routes")(app)
-  require("./routes/author.routes")(app)
-  require("./routes/genre.routes")(app)
+  // Routes
+app.use('/api/books', require("./routes/book.routes"));
+app.use('/api/author', require("./routes/author.routes"));
+app.use('/api/genre', require("./routes/genre.routes"));
+
+
+  // // api routes
+  // require("./routes/book.routes")(app)
+  // require("./routes/author.routes")(app)
+  // require("./routes/genre.routes")(app)
 
 
 // set port, listen for requests

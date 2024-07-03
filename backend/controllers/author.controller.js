@@ -6,6 +6,8 @@ const Op = db.Op;
 
 exports.create = (req, res) => {
 
+  console.log("creating user")
+
     //Validate request
     if (!req.body.name) {
       res.status(400).send({

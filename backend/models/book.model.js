@@ -33,9 +33,10 @@ module.exports = (sequelize, Sequelize, DataTypes) => {
         description: {
             type: DataTypes.TEXT
         },
-        // imagePath: {
-        //     type: DataTypes.STRING
-        //   },
+        imagePath: {
+            type: DataTypes.STRING,
+            allowNull: true
+          },
         created_at: {
           allowNull: false,
           type: DataTypes.DATE

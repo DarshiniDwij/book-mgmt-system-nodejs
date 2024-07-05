@@ -21,7 +21,8 @@ const createBook = async(req, res) => {
       publication_date: req.body.publication_date,
       language: req.body.language,
       price: req.body.price,
-      description: req.body.description
+      description: req.body.description,
+      imagePath: req.body.imagePath
     };
   
     // Save Book in database

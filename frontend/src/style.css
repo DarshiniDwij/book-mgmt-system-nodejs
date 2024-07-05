@@ -1,0 +1,46 @@
+
+/* Golbal CSS applies throughout application */
+body {
+    background-color: #F5F5F5;;
+    /* Adjust the value to your preference */
+    /* color : #0E345A */
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.custom-nav-link {
+    /* Specify your desired font color */
+    background-color: transparent !important;/* Set background color to transparent */
+    border-color: transparent !important; 
+    color : #0E345A !important;
+}
+
+.divider {
+    width: 5%;
+    margin: 10px 0; 
+    display: inline-block; /* Adjust margin for spacing */
+}
+
+.divider hr {
+    border: none;
+    height: 1px;
+    background-color: #ccc; /* Color of the divider */
+}
+
+/* styles.css or styled components */
+.custom-button {
+    padding: 10px 40px; /* Adjust padding for button size */
+    border: 2px solid #fff; /* White border */
+    background-color: transparent; /* Transparent background */
+    color: #fff; /* Text color */
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer; /* Hover cursor */
+    outline: none; /* Remove default focus outline */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+.custom-button:hover {
+    background-color: #fff; /* Background color on hover */
+    color: #333; /* Text color on hover */
+}
+

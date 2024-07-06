@@ -27,7 +27,14 @@ const DivOverlay = () =>{
                 <span style={{fontSize:'80px',lineHeight:1,color:'white'}}>There's No</span><br/>
                    <span style={{fontSize:'80px',lineHeight:1,color:'white',font:'georgia'}}> Such Thing As Too</span><br/>
                    <span style={{fontSize:'80px',lineHeight:1,color:'white'}}> Many Books</span><br/>
-                   <button className="custom-button" style={{marginTop:'30px'}}>View Books</button>
+                   <button className="custom-button" style={{marginTop:'40px',marginBottom:'30px'}}>View Books</button>
+                   <div>
+
+                   <div className="divider" style={{marginBottom:'30px'}}>
+                    <hr />
+                    </div>
+                   </div>
+                   
                 </div>
 
             </section>

@@ -26,21 +26,35 @@ const BookLaunch = () =>{
     };
 
     return (
-        <div className="book-container">
-            {book ? (
-                <div className="book-details">
-                    <img src={book.image} alt={book.title} className="book-image" />
-                    <div className="book-info">
-                        <h2>{book.title}</h2>
-                        <p>{book.author}</p>
-                        <p>{book.genre}</p>
-                        <p>{book.published}</p>
+        <div>
+            <div>
+
+            <div><h5 style={{color:'#0E345A', marginTop:'40px'}}>Coming Up</h5> </div>
+                <div style={{fontSize:'60px',lineHeight:1,color:'#0E345A'}}>BOOK LAUNCH</div><br/>
+               
+                
+            </div>
+
+                 <div className="book-container">
+                        {book ? (
+                            <div className="book-details">
+                                 <div className="book-info">
+                                    <h2>{book.title}</h2>
+                                    <p>Author : {book.author_id}</p>
+                                    <p>When : {book.genre}</p>
+                                    <p>{book.publication_date}</p>
+                                    <p>{process.env.PUBLIC_URL+"/images/"+book.imagePath} </p>
+                                </div>
+                                <img src={process.env.PUBLIC_URL+"/images/"+book.imagePath} alt={book.title} className="book-image" />
+                               
+                            </div>
+                        ) : (
+                            <p>Loading...</p>
+                        )}
                     </div>
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
+            
         </div>
+        
     );
 
 };

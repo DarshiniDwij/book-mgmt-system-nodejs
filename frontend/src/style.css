@@ -44,3 +44,70 @@ body {
     color: #333; /* Text color on hover */
 }
 
+.modal-content{
+    width: 1000px !important;
+    border-radius: 0 !important;
+    border: 2px solid black !important;
+}
+
+.modal-dialog{
+    margin-left: 250px !important;
+    margin-top: 100px !important;
+}
+
+.filter-divider {
+    width: 50%;
+    margin-top: 1px; 
+    margin-bottom: 1px;
+    display: inline-block; /* Adjust margin for spacing */
+}
+
+.filter-divider hr {
+    border: none;
+    height: 1px;
+    background-color: black; /* Color of the divider */
+}
+
+.filter-button{
+
+    padding: 10px 20px; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer; /* Hover cursor */
+    outline: none; /* Remove default focus outline */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transition */
+
+}
+
+.button1-container {
+    display: flex; /* Use flexbox */
+  }
+
+  .button1 {
+    margin-right: 10px; /* Optional: Add margin between buttons */
+  }
+
+
+  .modal-button {
+    padding: 10px 40px; /* Adjust padding for button size */
+    border: 2px solid black; /* White border */
+    background-color: transparent; /* Transparent background */
+    color:black; /* Text color */
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer; /* Hover cursor */
+    outline: none; /* Remove default focus outline */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transition */
+    margin-top:5px;
+    margin-bottom: 5px;
+    margin-left: 20px;
+    width: 160px;
+}
+
+.modal-button:hover {
+    background-color: #0E345A; /* Background color on hover */
+    color: white; /* Text color on hover */
+}

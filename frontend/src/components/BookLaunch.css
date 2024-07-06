@@ -8,15 +8,15 @@
 .book-details {
     display: flex;
     align-items: center; /* Align items vertically within the book-details container */
-    border: 1px solid #ccc; /* Optional: Add border around book details */
     padding: 10px; /* Optional: Add padding around book details */
     width: 80%; /* Adjust width as needed */
 }
 
 .book-image {
-    width: 200px; /* Adjust image width */
+    width: 500px; /* Adjust image width */
     height: auto; /* Maintain aspect ratio */
-    margin-right: 20px; /* Optional: Add margin between image and book info */
+    margin-left: 20px; /* Optional: Add margin between image and book info */
+    border: 10px solid #0E345A; 
 }
 
 .book-info {

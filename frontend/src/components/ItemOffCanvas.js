@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import 'react-datepicker/dist/react-datepicker.css';
 
-function ItemOffCanvas({ show,handleClose }) {
+const ItemOffCanvas = ({handleCallBack,show,handleClose})=> {
  
 
   const [authors, setAuthors] = useState([]);
@@ -33,14 +33,28 @@ function ItemOffCanvas({ show,handleClose }) {
 
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = async(event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+   // State to manage validation errors
+   const [errors, setErrors] = useState({
+    title: '',
+    selectedAuthor: '',
+    selectedGenre: '',
+    isPublished:'',
+    description:'',
+    selectedDate:'',
+    selectedLang:'',
+    amount:''
+  });
 
-    setValidated(true);
+  const handleSubmit = async(event) => {
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    // }
+    event.preventDefault();
+    if (validateForm()){
+
+      setValidated(true);
     try {
      
         // Create book object
@@ -68,14 +82,24 @@ function ItemOffCanvas({ show,handleClose }) {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-  
+        console.log('Book created: started');
         const data = await response.json();
         console.log('Book created:', data);
-  
-        // Optionally reset form fields after successful submission
+      //  handleCallBack(data);
+      callCallBack(data);
         
-        handleCancel();
-       
+         handleCancel();
+        setErrors({
+          title: '',
+          selectedAuthor: '',
+          selectedGenre: '',
+          isPublished:'',
+          description:'',
+          selectedDate:'',
+          selectedLang:'',
+          amount:''
+        });
+        setValidated(false);
   
         // Handle success or navigation to next page
         // Example: Redirect to a success page or show a success message
@@ -83,12 +107,67 @@ function ItemOffCanvas({ show,handleClose }) {
         console.error('Error creating book:', error);
         // Handle error state or show an error message to the user
       }
+    }
+    else{
+      console.log('Form has errors. Cannot submit.');
+      event.stopPropagation();
+    }
+    
   };
+
+  const callCallBack = (data) =>{
+    console.log("happy ending")
+    console.log(data);
+    handleCallBack(data);
+  }
 
 
   const handleAmountChange = (event) => {
     const value = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
     setAmount(value);
+    setErrors({ ...errors, amount: '' }); 
+  };
+
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {};
+
+    if (!title.trim()) {
+      newErrors.title = 'Title is required';
+      valid = false;
+    }
+    if (!selectedAuthor.trim()) {
+      newErrors.author = 'Author is required';
+      valid = false;
+    }
+    if (!selectedGenre.trim()) {
+      newErrors.genre = 'Genre is required';
+      valid = false;
+    }
+    // if (!isPublished.trim()) {
+    //   newErrors.pstatus = 'Publish status is required';
+    //   valid = false;
+    // }
+    // if (!selectedDate.trim()) {
+    //   newErrors.date = 'Published date is required';
+    //   valid = false;
+    // }
+    if (!selectedLang.trim()) {
+      newErrors.language = 'language is required';
+      valid = false;
+    }
+    if (!amount) {
+      newErrors.cost = 'Cost is required';
+      valid = false;
+    }
+    if (!description.trim()) {
+      newErrors.description = 'Description is required';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
 
   const handleCancel = (event) =>{
@@ -103,18 +182,29 @@ function ItemOffCanvas({ show,handleClose }) {
     setDescription('');
     setImageName('');
 
+
+    
+    document.getElementById("myForm").reset();
+
+    
+
+    
+
   }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    setErrors({ ...errors, selectedDate: '' }); 
   };
 
   const handleDescChange = (event) => {
     setDescription(event.target.value);
+    setErrors({ ...errors, description: '' }); 
   }
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
+    setErrors({ ...errors, title: '' }); 
   }
 
   const handleImageChange = (event) => {
@@ -123,6 +213,7 @@ function ItemOffCanvas({ show,handleClose }) {
 
   const handlePublishStatusChange = (event) => {
     setIsPublished(event.target.value === 'true');
+    setErrors({ ...errors, isPublished: '' }); 
   };
 
   
@@ -161,23 +252,20 @@ const fetchGenre = async () => {
 
 const handleAuthorChange = (event) => {
     setSelectedAuthor(event.target.value);
-    // if (onSelect) {
-    //   onSelect(event.target.value);
-    // }
+    setErrors({ ...errors, author: '' }); 
+   
   };
 
   const handleGenreChange = (event) => {
     setSelectedGenre(event.target.value);
-    // if (onSelect) {
-    //   onSelect(event.target.value);
-    // }
+    setErrors({ ...errors, genre: '' }); 
+   
   };
 
   const handleLangChange = (event) => {
     setSelectedLang(event.target.value);
-    // if (onSelect) {
-    //     onSelect(event.target.value);
-    //   }
+    setErrors({ ...errors, selectedLang: '' }); 
+   
   };
 
   
@@ -203,7 +291,7 @@ const handleAuthorChange = (event) => {
           <Offcanvas.Title style={{color:'white'}}>Add New Book / Update Existing Book</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form  id="myForm" noValidate validated={validated} >
           <Row className="mb-3">
 
             <Form.Group as={Col} controlId="firstName">
@@ -216,6 +304,9 @@ const handleAuthorChange = (event) => {
                 value={title}
                 onChange={handleTitleChange}
             />
+             <Form.Control.Feedback type="invalid">
+          {errors.title}
+        </Form.Control.Feedback>
             </Form.Group>
 
         <Form.Group className="mb-3" controlId="gender">
@@ -226,6 +317,9 @@ const handleAuthorChange = (event) => {
                 <option key={author.id} value={author.author_id}>{author.name}</option>
             ))}
         </Form.Select>
+        <Form.Control.Feedback type="invalid">
+          {errors.author}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="gender">
@@ -236,6 +330,9 @@ const handleAuthorChange = (event) => {
                 <option key={genre.id} value={genre.genre_id}>{genre.genre_name}</option>
             ))}
         </Form.Select>
+        <Form.Control.Feedback type="invalid">
+          {errors.genre}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group className="mb-3">
@@ -261,6 +358,9 @@ const handleAuthorChange = (event) => {
             onChange={handlePublishStatusChange}
           />
         </div>
+        <Form.Control.Feedback type="invalid">
+          {errors.pstatus}
+        </Form.Control.Feedback>
       </Form.Group>
 
       
@@ -272,6 +372,9 @@ const handleAuthorChange = (event) => {
           <option value="English">English</option>
           <option value="other">Other</option>
         </Form.Select>
+        <Form.Control.Feedback type="invalid">
+          {errors.language}
+        </Form.Control.Feedback>
       </Form.Group>
 
 
@@ -285,6 +388,9 @@ const handleAuthorChange = (event) => {
           className="form-control"
           required
         />
+         <Form.Control.Feedback type="invalid">
+          {errors.cost}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group className="mb-3">
@@ -298,6 +404,9 @@ const handleAuthorChange = (event) => {
           rows={4}
           required
         />
+         <Form.Control.Feedback type="invalid">
+          {errors.description}
+        </Form.Control.Feedback>
       </Form.Group>
 
       {/* <Form.Group as={Col} controlId="firstName">
@@ -324,6 +433,9 @@ const handleAuthorChange = (event) => {
           className="form-control"
           required
         />
+         <Form.Control.Feedback type="invalid">
+          {errors.date}
+        </Form.Control.Feedback>
       </Form.Group>
 
 
@@ -333,8 +445,8 @@ const handleAuthorChange = (event) => {
          SUBMIT
         </Button> */}
 
-        <button className="modal-button" type="submit">SUBMIT</button>
-              <button className="modal-button">CANCEL</button>
+        <button className="modal-button" type="submit" onClick={handleSubmit}>SUBMIT</button>
+              <button className="modal-button" onClick={handleCancel}>CANCEL</button>
 
         {/* <Button className="w-100 custom-borderless-btn" style={{backgroundColor:"#0E345A",border:'none',width:'200px'}} onClick={() =>onClickEventHandler() }>
          CANCEL

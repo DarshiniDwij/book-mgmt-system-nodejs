@@ -18,6 +18,15 @@ const BookStore =() =>{
     const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const handleCallBack = (newBook) => {
+    console.log(newBook)
+    setBooks([...books, newBook]);
+  };
+
+  console.log("books are");
+      console.log(books);
+
+
     const toggleAuthorList = () => {
         setAuthorShowList(!showAuthorList);
       };
@@ -31,11 +40,9 @@ const BookStore =() =>{
       };
     
 
-      console.log("))))))))))))")
 
 
       const fetchBookDetails = async () => {
-        console.log("((((((((((");
       try {
         const response = await fetch('http://localhost:3000/api/books/');
         const data = await response.json();
@@ -60,6 +67,8 @@ const BookStore =() =>{
 
         handleShow();
       }
+
+      
 
     return (
         <div>
@@ -128,9 +137,9 @@ const BookStore =() =>{
                      Add Book
                     </Button>
 
-                    <ItemOffCanvas show={show}
+                    <ItemOffCanvas   handleCallBack={handleCallBack} show={show}
                                 handleClose={handleClose}
-                                ></ItemOffCanvas>
+                               ></ItemOffCanvas>
 
                     <br/>
 

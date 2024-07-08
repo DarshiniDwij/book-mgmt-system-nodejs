@@ -200,7 +200,7 @@ const handleAuthorChange = (event) => {
       </Button> */}
       <Offcanvas show={show} onHide={handleClose} placement='end' backdrop='static' style={{ width: '50vw' }}>
         <Offcanvas.Header closeButton style={{backgroundColor:'#0E345A'}}>
-          <Offcanvas.Title style={{color:'white'}}>Add New Book</Offcanvas.Title>
+          <Offcanvas.Title style={{color:'white'}}>Add New Book / Update Existing Book</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>

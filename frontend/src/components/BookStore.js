@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ProductCard from './ProductCard';
 const BookStore =() =>{
 
    // const { id } = useParams();
-    const [bookDetails, setBookDetails] = useState(null);
+    const [books, setBooks] = useState(null);
     const [showAuthorList, setAuthorShowList] = useState(false);
     const [showGenreList,setGenreList] = useState(false);
     const [showPrice,setShowPrice] = useState(false);
@@ -23,22 +24,28 @@ const BookStore =() =>{
       };
     
 
+      console.log("))))))))))))")
+
+
+      const fetchBookDetails = async () => {
+        console.log("((((((((((");
+      try {
+        const response = await fetch('http://localhost:3000/api/books/');
+        const data = await response.json();
+        console.log("response");
+        setBooks(data); // Assuming API response is JSON with book details
+      } catch (error) {
+        console.error('Error fetching book details:', error);   
+      }
+    };
+
     useEffect(() => {
         // Fetch book details from API
-        const fetchBookDetails = async () => {
-          try {
-            const response = await fetch('http://localhost:3000/api/books/2');
-            const data = await response.json();
-            console.log("response");
-            setBookDetails(data); // Assuming API response is JSON with book details
-          } catch (error) {
-            console.error('Error fetching book details:', error);   
-          }
-        };
+       
         fetchBookDetails();
     }, []);
 
-    if (!bookDetails) {
+    if (!books) {
         return <div>Loading the page...</div>; // Add loading state if data is being fetched
       }
 
@@ -116,6 +123,12 @@ const BookStore =() =>{
                         <h1>Book Store</h1>
                     </div>
                     <div>
+
+                        <div className="book-list">
+                            {books.map((book, index) => (
+                            book && <ProductCard key={index} props={book} />
+                             ))}
+                        </div>
                         
                     </div>
                 </div>

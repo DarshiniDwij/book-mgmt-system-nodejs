@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container} from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ProductCard from './ProductCard';
+import {Button} from 'react-bootstrap';
+import ItemOffCanvas from './ItemOffCanvas';
 const BookStore =() =>{
 
    // const { id } = useParams();
@@ -10,6 +12,11 @@ const BookStore =() =>{
     const [showAuthorList, setAuthorShowList] = useState(false);
     const [showGenreList,setGenreList] = useState(false);
     const [showPrice,setShowPrice] = useState(false);
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
     const toggleAuthorList = () => {
         setAuthorShowList(!showAuthorList);
@@ -47,6 +54,11 @@ const BookStore =() =>{
 
     if (!books) {
         return <div>Loading the page...</div>; // Add loading state if data is being fetched
+      }
+
+      const handleoffCanvas = (event) =>{
+
+        handleShow();
       }
 
     return (
@@ -111,6 +123,14 @@ const BookStore =() =>{
                     <div className="filter-divider" style={{marginBottom:'30px'}}>
                     <hr />
                     </div>
+
+                    <Button className="w-100 custom-borderless-btn" style={{backgroundColor:"#0E345A",border:'none',width:'200px'}} onClick={handleoffCanvas}>
+                     Add Book
+                    </Button>
+
+                    <ItemOffCanvas show={show}
+                                handleClose={handleClose}
+                                ></ItemOffCanvas>
 
                     <br/>
 

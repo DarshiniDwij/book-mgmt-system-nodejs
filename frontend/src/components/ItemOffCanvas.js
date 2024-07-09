@@ -1,97 +1,146 @@
-import React, { useState, useEffect } from 'react';
-import { Offcanvas, Form, Row, Col } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useState, useEffect } from "react";
+import { Offcanvas, Form, Row, Col } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
+const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
   const [authors, setAuthors] = useState([]);
-  const [selectedAuthor, setSelectedAuthor] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState("");
   const [genres, setGenres] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState("");
   const [isPublished, setIsPublished] = useState(false);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedLang, setSelectedLang] = useState('');
-  const [amount, setAmount] = useState('');
-  const [title, setTitle] = useState('');
+  const [selectedLang, setSelectedLang] = useState("");
+  const [amount, setAmount] = useState("");
+  const [title, setTitle] = useState("");
+  const [id, setId] = useState("");
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({
-    title: '',
-    author: '',
-    genre: '',
-    pstatus: '',
-    description: '',
-    date: '',
-    language: '',
-    cost: ''
+    title: "",
+    author: "",
+    genre: "",
+    pstatus: "",
+    description: "",
+    date: "",
+    language: "",
+    cost: "",
   });
 
+  useEffect(() => {
+    if (bookData) {
+      setId(bookData.book_id || "");
+      setTitle(bookData.title || "");
+      setSelectedAuthor(bookData.author_id || "");
+      setSelectedGenre(bookData.genre_id || "");
+      setIsPublished(bookData.published || false);
+      setSelectedDate(
+        bookData.publication_date ? new Date(bookData.publication_date) : null
+      );
+      setSelectedLang(bookData.language || "");
+      setAmount(bookData.price || "");
+      setDescription(bookData.description || "");
+    }
+  }, [bookData]);
+
   const handleSubmit = async (event) => {
+    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     event.preventDefault();
+
     if (validateForm()) {
       setValidated(true);
+      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+      console.log("book id is:" + id);
+      const newBook = {
+        id: bookData ? id : null,
+        title: title,
+        author_id: selectedAuthor,
+        genre_id: selectedGenre,
+        published: isPublished,
+        publication_date: selectedDate,
+        language: selectedLang,
+        price: parseFloat(amount.replace(/[^\d.-]/g, "")).toFixed(2),
+        description: description,
+        imagePath: title + ".png",
+      };
+
       try {
-        const newBook = {
-          title: title,
-          author_id: selectedAuthor,
-          genre_id: selectedGenre,
-          published: isPublished,
-          publication_date: selectedDate,
-          language: selectedLang,
-          price: parseFloat(amount.replace(/[^\d.-]/g, '')).toFixed(2),
-          description: description,
-          imagePath: title + '.png'
-        };
-
-        const response = await fetch('http://localhost:3000/api/books/createBook', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newBook)
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        console.log("enter the block");
+        let response;
+        if (newBook.id) {
+          console.log("enter the update");
+          // Update existing book
+          response = await fetch(
+            `http://localhost:3000/api/books/${newBook.id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newBook),
+            }
+          );
+          const data = await response.json();
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
+          console.log(data);
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
+          handleCallBack(newBook);
+          handleClose();
+          resetForm();
+        } else {
+          console.log("enter the new");
+          // Create new book
+          response = await fetch("http://localhost:3000/api/books/createBook", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newBook),
+          });
+          const data = await response.json();
+          handleCallBack(data);
+          handleClose();
+          resetForm();
         }
 
-        const data = await response.json();
-        callCallBack(data);
-        handleClose();
-        resetForm();
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        // console.log(
+        //   `Book ${newBook.id ? "updated" : "created"} successfully:`,
+        //   data
+        // );
       } catch (error) {
-        console.error('Error creating book:', error);
+        console.error(
+          `Error ${newBook.id ? "updating" : "creating"} book:`,
+          error
+        );
       }
     } else {
-      console.log('Form has errors. Cannot submit.');
-      event.stopPropagation();
+      console.log("Form has errors. Cannot submit.");
     }
   };
 
-  const callCallBack = (data) => {
-    console.log('Book created:', data);
-    handleCallBack(data);
-  };
-
   const resetForm = () => {
-    setTitle('');
-    setSelectedAuthor('');
-    setSelectedGenre('');
+    setTitle("");
+    setSelectedAuthor("");
+    setSelectedGenre("");
     setIsPublished(false);
     setSelectedDate(null);
-    setSelectedLang('');
-    setAmount('');
-    setDescription('');
+    setSelectedLang("");
+    setAmount("");
+    setDescription("");
     setValidated(false);
     setErrors({
-      title: '',
-      author: '',
-      genre: '',
-      pstatus: '',
-      description: '',
-      date: '',
-      language: '',
-      cost: ''
+      title: "",
+      author: "",
+      genre: "",
+      pstatus: "",
+      description: "",
+      date: "",
+      language: "",
+      cost: "",
     });
   };
 
@@ -100,27 +149,27 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
     const newErrors = {};
 
     if (!title.trim()) {
-      newErrors.title = 'Title is required';
+      newErrors.title = "Title is required";
       valid = false;
     }
-    if (!selectedAuthor.trim()) {
-      newErrors.author = 'Author is required';
+    if (!selectedAuthor) {
+      newErrors.author = "Author is required";
       valid = false;
     }
-    if (!selectedGenre.trim()) {
-      newErrors.genre = 'Genre is required';
+    if (!selectedGenre) {
+      newErrors.genre = "Genre is required";
       valid = false;
     }
-    if (!selectedLang.trim()) {
-      newErrors.language = 'Language is required';
+    if (!selectedLang) {
+      newErrors.language = "Language is required";
       valid = false;
     }
     if (!amount) {
-      newErrors.cost = 'Cost is required';
+      newErrors.cost = "Cost is required";
       valid = false;
     }
     if (!description.trim()) {
-      newErrors.description = 'Description is required';
+      newErrors.description = "Description is required";
       valid = false;
     }
 
@@ -135,54 +184,56 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    setErrors({ ...errors, date: '' });
+    setErrors({ ...errors, date: "" });
   };
 
   const handleDescChange = (event) => {
     setDescription(event.target.value);
-    setErrors({ ...errors, description: '' });
+    setErrors({ ...errors, description: "" });
   };
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
-    setErrors({ ...errors, title: '' });
+    setErrors({ ...errors, title: "" });
   };
 
   const handlePublishStatusChange = (event) => {
-    setIsPublished(event.target.value === 'true');
-    setErrors({ ...errors, pstatus: '' });
+    setIsPublished(event.target.value === "true");
+    setErrors({ ...errors, pstatus: "" });
   };
 
   const handleAmountChange = (event) => {
-    const value = event.target.value.replace(/\D/g, '');
+    const value = event.target.value.replace(/\D/g, "");
     setAmount(value);
-    setErrors({ ...errors, cost: '' });
+    setErrors({ ...errors, cost: "" });
   };
 
   const handleAuthorChange = (event) => {
     setSelectedAuthor(event.target.value);
-    setErrors({ ...errors, author: '' });
+    setErrors({ ...errors, author: "" });
   };
 
   const handleGenreChange = (event) => {
     setSelectedGenre(event.target.value);
-    setErrors({ ...errors, genre: '' });
+    setErrors({ ...errors, genre: "" });
   };
 
   const handleLangChange = (event) => {
     setSelectedLang(event.target.value);
-    setErrors({ ...errors, language: '' });
+    setErrors({ ...errors, language: "" });
   };
 
   useEffect(() => {
     // Fetch Authors details from API
     const fetchAuthors = async () => {
       try {
-        const response1 = await fetch('http://localhost:3000/api/author/authors');
+        const response1 = await fetch(
+          "http://localhost:3000/api/author/authors"
+        );
         const data1 = await response1.json();
         setAuthors(data1); // Assuming API response is JSON with author details
       } catch (error) {
-        console.error('Error fetching authors:', error);
+        console.error("Error fetching authors:", error);
       }
     };
 
@@ -193,11 +244,11 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
     // Fetch Genres details from API
     const fetchGenres = async () => {
       try {
-        const response2 = await fetch('http://localhost:3000/api/genre/genres');
+        const response2 = await fetch("http://localhost:3000/api/genre/genres");
         const data2 = await response2.json();
         setGenres(data2); // Assuming API response is JSON with genre details
       } catch (error) {
-        console.error('Error fetching genres:', error);
+        console.error("Error fetching genres:", error);
       }
     };
 
@@ -206,15 +257,30 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
 
   return (
     <>
-      <Offcanvas show={show} onHide={handleClose} placement='end' backdrop='static' style={{ width: '50vw' }}>
-        <Offcanvas.Header closeButton style={{ backgroundColor: '#0E345A' }}>
-          <Offcanvas.Title style={{ color: 'white' }}>Add New Book / Update Existing Book</Offcanvas.Title>
+      <Offcanvas
+        show={show}
+        onHide={handleClose}
+        placement="end"
+        backdrop="static"
+        style={{ width: "50vw", zIndex: 1050 }}
+      >
+        <Offcanvas.Header closeButton style={{ backgroundColor: "#0E345A" }}>
+          <Offcanvas.Title style={{ color: "white" }}>
+            Add New Book / Update Existing Book
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Form id="myForm" noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form
+            id="myForm"
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+          >
             <Row className="mb-3">
               <Form.Group as={Col} controlId="firstName">
-                <Form.Label style={{ fontWeight: 'bold' }}>Book Title</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Book Title
+                </Form.Label>
                 <Form.Control
                   required
                   type="text"
@@ -229,7 +295,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="gender">
-                <Form.Label style={{ fontWeight: 'bold' }}>Author</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>Author</Form.Label>
                 <Form.Select
                   name="author"
                   value={selectedAuthor}
@@ -237,8 +303,10 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
                   isInvalid={!!errors.author}
                 >
                   <option value="">Select an author</option>
-                  {authors.map(author => (
-                    <option key={author.id} value={author.author_id}>{author.name}</option>
+                  {authors.map((author) => (
+                    <option key={author.id} value={author.author_id}>
+                      {author.name}
+                    </option>
                   ))}
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
@@ -247,7 +315,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="gender">
-                <Form.Label style={{ fontWeight: 'bold' }}>Genre</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>Genre</Form.Label>
                 <Form.Select
                   name="genre"
                   value={selectedGenre}
@@ -255,8 +323,10 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
                   isInvalid={!!errors.genre}
                 >
                   <option value="">Select a genre</option>
-                  {genres.map(genre => (
-                    <option key={genre.id} value={genre.genre_id}>{genre.genre_name}</option>
+                  {genres.map((genre) => (
+                    <option key={genre.id} value={genre.genre_id}>
+                      {genre.genre_name}
+                    </option>
                   ))}
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
@@ -265,7 +335,9 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label style={{ fontWeight: 'bold' }}>Publish Status</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Publish Status
+                </Form.Label>
                 <div>
                   <Form.Check
                     type="radio"
@@ -293,7 +365,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="gender">
-                <Form.Label style={{ fontWeight: 'bold' }}>Language</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>Language</Form.Label>
                 <Form.Select
                   name="language"
                   value={selectedLang}
@@ -311,7 +383,9 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label style={{ fontWeight: 'bold' }}>Cost of the Book</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Cost of the Book
+                </Form.Label>
                 <Form.Control
                   type="text"
                   value={amount}
@@ -327,7 +401,9 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label style={{ fontWeight: 'bold' }}>Description</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Description
+                </Form.Label>
                 <Form.Control
                   as="textarea"
                   name="description"
@@ -344,7 +420,9 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label style={{ fontWeight: 'bold' }}>Publication Date</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Publication Date
+                </Form.Label>
                 <br />
                 <DatePicker
                   selected={selectedDate}
@@ -360,14 +438,16 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose }) => {
                   {errors.date}
                 </Form.Control.Feedback>
               </Form.Group>
-
             </Row>
 
             <div className="text-center">
-              <button className="modal-button mx-2" type="submit">SUBMIT</button>
-              <button className="modal-button mx-2" onClick={handleCancel}>CANCEL</button>
+              <button className="modal-button mx-2" type="submit">
+                SUBMIT
+              </button>
+              <button className="modal-button mx-2" onClick={handleCancel}>
+                CANCEL
+              </button>
             </div>
-
           </Form>
         </Offcanvas.Body>
       </Offcanvas>

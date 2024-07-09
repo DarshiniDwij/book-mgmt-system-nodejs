@@ -5,17 +5,28 @@ import Col from "react-bootstrap/Col";
 import ProductCard from "./ProductCard";
 import { Button } from "react-bootstrap";
 import ItemOffCanvas from "./ItemOffCanvas";
+import ToastComponent from "./ToastComponent";
 const BookStore = () => {
   // const { id } = useParams();
   const [books, setBooks] = useState(null);
   const [showAuthorList, setAuthorShowList] = useState(false);
   const [showGenreList, setGenreList] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
+  const [showToast, setShowtoast] = useState(false);
 
   const [show, setShow] = useState(false);
 
+  // const [toastMessage, setToastMessage] = useState("");
+  // const [toastVariant, setToastVariant] = useState("success");
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // const handleShowToast = (message, variant) => {
+  //   setToastMessage(message);
+  //   setToastVariant(variant);
+  //   setShowToast(true);
+  // };
 
   // const handleCallBack = (newBook) => {
   //   console.log(newBook);

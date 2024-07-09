@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import BookModal from "./BookModal";
 import ItemOffCanvas from "./ItemOffCanvas";
-const ProductCard = ({ book, handleCallBack }) => {
+const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
   const [showFooter, setShowFooter] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
@@ -27,6 +27,11 @@ const ProductCard = ({ book, handleCallBack }) => {
     setModalShow(false);
     setEditItem(item);
     setShow(true);
+  };
+
+  const onHandleDeleteCallBack1 = (item) => {
+    setModalShow(false);
+    onHandleDeleteCallBack(item);
   };
 
   // const handleCallBack = (item) => {
@@ -75,7 +80,6 @@ const ProductCard = ({ book, handleCallBack }) => {
     fetchGenre();
     console.log("genre is :");
     console.log(genre);
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%");
     setModalShow(true);
   };
 
@@ -120,6 +124,7 @@ const ProductCard = ({ book, handleCallBack }) => {
         author={author}
         genre={genre}
         onHandleCallBack={onHandleCallBack}
+        onHandleDeleteCallBack1={onHandleDeleteCallBack1}
       />
 
       {editItem && (

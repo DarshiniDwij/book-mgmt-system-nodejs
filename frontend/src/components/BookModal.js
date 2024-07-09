@@ -15,6 +15,11 @@ const BookModal = (props) => {
     props.onHandleCallBack(props.book);
     // props.onHide();
   };
+
+  const handleDelete = () => {
+    props.onHandleDeleteCallBack1(props.book);
+  };
+
   console.log("author");
   console.log(props.author_name);
 
@@ -63,7 +68,12 @@ const BookModal = (props) => {
                       UPDATE
                     </button>
 
-                    <button className="modal-button">DELETE</button>
+                    <button
+                      className="modal-button"
+                      onClick={() => handleDelete()}
+                    >
+                      DELETE
+                    </button>
                   </div>
                 </Col>
               </Row>

@@ -33,6 +33,38 @@ const BookStore = () => {
   //   setBooks([...books, newBook]);
   // };
 
+  const onHandleDeleteCallBack = (item) => {
+    console.log("deletion started");
+    let index = books.findIndex((book) => book.book_id === item.book_id);
+    if (index !== -1) {
+      console.log("deletion started1");
+      deleteBook(item.book_id);
+    } else {
+      console.log("unable to find the book");
+    }
+  };
+
+  const deleteBook = async (bookId) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/books/" + bookId,
+        {
+          method: "DELETE",
+        }
+      ).then((response) => {
+        if (!response.ok) {
+          throw new Error("Book Deleted");
+        }
+        const updatedBooks = books.filter((book) => book.book_id !== bookId);
+        setBooks(updatedBooks);
+        handleShowToast("Book deleted Succesfully", "success");
+        // return response.json();
+      });
+    } catch (error) {
+      console.error(`Error deleting book with ID ${bookId}:`, error);
+    }
+  };
+
   const handleCallBack = (updatedBook) => {
     console.log("updation started");
     console.log(updatedBook);
@@ -202,6 +234,7 @@ const BookStore = () => {
                           key={index}
                           book={book}
                           handleCallBack={handleCallBack}
+                          onHandleDeleteCallBack={onHandleDeleteCallBack}
                         />
                       )
                   )}

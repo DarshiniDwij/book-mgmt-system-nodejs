@@ -12,21 +12,21 @@ const BookStore = () => {
   const [showAuthorList, setAuthorShowList] = useState(false);
   const [showGenreList, setGenreList] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
-  const [showToast, setShowtoast] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const [show, setShow] = useState(false);
 
-  // const [toastMessage, setToastMessage] = useState("");
-  // const [toastVariant, setToastVariant] = useState("success");
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVariant, setToastVariant] = useState("success");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const handleShowToast = (message, variant) => {
-  //   setToastMessage(message);
-  //   setToastVariant(variant);
-  //   setShowToast(true);
-  // };
+  const handleShowToast = (message, variant) => {
+    setToastMessage(message);
+    setToastVariant(variant);
+    setShowToast(true);
+  };
 
   // const handleCallBack = (newBook) => {
   //   console.log(newBook);
@@ -48,9 +48,11 @@ const BookStore = () => {
 
       // Now updatedBooks contains the updated array of books
       setBooks(updatedBooks);
+      handleShowToast("book updated Succesfully", "success");
     } else {
       console.log("updation started2");
       setBooks([...books, updatedBook]);
+      handleShowToast("book created Succesfully", "success");
     }
   };
 
@@ -209,6 +211,12 @@ const BookStore = () => {
           </Col>
         </Row>
       </Container>
+      <ToastComponent
+        showToast={showToast}
+        setShowToast={setShowToast}
+        message={toastMessage}
+        variant={toastVariant}
+      />
     </div>
   );
 };

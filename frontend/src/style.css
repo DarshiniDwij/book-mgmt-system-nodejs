@@ -124,3 +124,51 @@ body {
     margin: 10px; /* Space between items */
     margin-top: 40px;
   }
+
+  .main-div {
+    position: relative;
+    width: 100%;
+    height: 700px; /* Adjust height as needed */
+  }
+  
+  .empty-div{
+    width: 100%;
+    height: 100%; /* Fills the entire app-container */
+    background-color:#d9ddde;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    margin-top: 80px;
+  }
+  
+  .author-img {
+    position: absolute;
+    top: 50px; /* Adjust positioning as needed */
+    left: 50px; /* Adjust positioning as needed */
+    z-index: 1; /* Above the empty-div */
+    width: 800px;
+    margin-left: 500px;
+    margin-top: -100px;
+  }
+  
+  .content-div{
+    position: absolute;
+    top: 20px; /* Adjust positioning as needed */
+    left: 20px; /* Adjust positioning as needed */
+    z-index: 2; /* Above both the empty-div and image */
+    background-color: white; /* Optional: Add a background color to distinguish */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for a floating effect */
+    width: 500px;
+    border:  #0E345A  solid 10px;
+    margin-left: 120px;
+    margin-top: 180px;
+  }
+
+  .author-img img {
+    max-width: 100%; /* Ensures image does not exceed container width */
+  height: auto; /* Maintains aspect ratio */
+  }
+  

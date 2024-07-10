@@ -44,12 +44,10 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
   }, [bookData]);
 
   const handleSubmit = async (event) => {
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     event.preventDefault();
 
     if (validateForm()) {
       setValidated(true);
-      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
       console.log("book id is:" + id);
       const newBook = {
         id: bookData ? id : null,
@@ -65,7 +63,6 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
       };
 
       try {
-        console.log("enter the block");
         let response;
         if (newBook.id) {
           console.log("enter the update");
@@ -81,9 +78,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
             }
           );
           const data = await response.json();
-          console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
           console.log(data);
-          console.log("!!!!!!!!!!!!!!!!!!!!!!!!");
           handleCallBack(newBook);
           handleClose();
           resetForm();
@@ -122,7 +117,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
     }
   };
 
-  const resetForm = () => {
+  const resetForm = (e) => {
+    // e.preventDefault();
     setTitle("");
     setSelectedAuthor("");
     setSelectedGenre("");
@@ -131,7 +127,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
     setSelectedLang("");
     setAmount("");
     setDescription("");
-    setValidated(false);
+
     setErrors({
       title: "",
       author: "",
@@ -178,8 +174,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
   };
 
   const handleCancel = () => {
-    handleClose();
     resetForm();
+    handleClose();
   };
 
   const handleDateChange = (date) => {

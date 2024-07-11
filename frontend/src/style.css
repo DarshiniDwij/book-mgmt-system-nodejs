@@ -70,6 +70,7 @@ body {
 
 .filter-button{
 
+  margin-right: auto;
     padding: 10px 20px; 
     margin-top: 5px;
     margin-bottom: 5px;
@@ -171,4 +172,23 @@ body {
     max-width: 100%; /* Ensures image does not exceed container width */
   height: auto; /* Maintains aspect ratio */
   }
+
+  .filter-list {
+    list-style: none; /* Remove bullet points */
+    padding-left: 0; /* Remove default padding */
+  }
+  
+  .filter-list li {
+    text-align: left; /* Align list items to the left */
+    margin-bottom: 10px; /* Optional: Add some space between list items */
+  }
+
+  .filetr-container {
+    display: flex; /* Use flexbox to manage items in the container */
+    justify-content: flex-start; /* Align items to the start (left) of the container */
+    align-items: center; /* Align items vertically centered */
+    width: 100%; /* Optionally set width for the container */
+    padding: 20px; /* Add padding to the container */
+  }
+  
   

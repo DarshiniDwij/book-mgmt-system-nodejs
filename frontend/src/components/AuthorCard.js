@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
 const AuthorCard = ({ author }) => {
   const [showFooter, setShowFooter] = useState(false);
+  const imageUrl = `/images/Authors/${author.name}.png`;
   const handleMouseEnter = () => {
     setShowFooter(true);
   };
@@ -21,7 +22,7 @@ const AuthorCard = ({ author }) => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <Card.Img variant="top" src="/images/test.png" />
+          <Card.Img variant="top" src={imageUrl} />
           <Card.Body>
             <Card.Title>{author.name}</Card.Title>
           </Card.Body>

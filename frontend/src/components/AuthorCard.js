@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 const AuthorCard = ({ author }) => {
   const [showFooter, setShowFooter] = useState(false);
   const imageUrl = `/images/Authors/${author.name}.png`;
@@ -10,6 +11,10 @@ const AuthorCard = ({ author }) => {
   const handleMouseLeave = () => {
     setShowFooter(false);
   };
+
+  // const handleAuthor = () => {
+  //   window.location.href = `/singleAuthor/${author}`;
+  // };
   return (
     <div>
       {author && (
@@ -32,12 +37,14 @@ const AuthorCard = ({ author }) => {
               className="text-center"
               style={{ backgroundColor: "#0E345A" }}
             >
-              <Button
-                className="w-100 custom-borderless-btn"
-                style={{ backgroundColor: "#0E345A", border: "none" }}
-              >
-                View Details
-              </Button>
+              <Link to={`/singleAuthor/${author.id}`} state={author}>
+                <Button
+                  className="w-100 custom-borderless-btn"
+                  style={{ backgroundColor: "#0E345A", border: "none" }}
+                >
+                  View Details
+                </Button>
+              </Link>
             </Card.Footer>
           )}
         </Card>

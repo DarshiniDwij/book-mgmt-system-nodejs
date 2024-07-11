@@ -1,14 +1,20 @@
-// import React from 'react';
+import React from "react";
+import ImageOverlay from "./ImageOverlay";
+import DivOverlay from "./DivOverlay";
+import BookLaunch from "./BookLaunch";
 
-// const Home = () => {
-//     return (
-//         <div>
-//             <div>
-//             <img src="/images/home.png" alt="Logo" style={{ height: '600px' ,maxWidth:'100%',width:'1400px'}}/>
-//             </div>
-            
-//         </div>
-//     );
-// };
+const Home = () => {
+  return (
+    <div>
+      <main>
+        <ImageOverlay></ImageOverlay>
+        <DivOverlay></DivOverlay>
+        <section id="bookLaunch">
+          <BookLaunch></BookLaunch>
+        </section>
+      </main>
+    </div>
+  );
+};
 
-// export default Home;
+export default Home;

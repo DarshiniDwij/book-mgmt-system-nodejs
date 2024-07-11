@@ -119,6 +119,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
 
   const resetForm = (e) => {
     // e.preventDefault();
+    setValidated(false);
     setTitle("");
     setSelectedAuthor("");
     setSelectedGenre("");
@@ -440,7 +441,11 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
               <button className="modal-button mx-2" type="submit">
                 SUBMIT
               </button>
-              <button className="modal-button mx-2" onClick={handleCancel}>
+              <button
+                className="modal-button mx-2"
+                type="button"
+                onClick={handleCancel}
+              >
                 CANCEL
               </button>
             </div>

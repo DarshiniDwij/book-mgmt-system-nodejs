@@ -177,7 +177,7 @@ const BookStore = () => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "white" }}>
       <Container>
         <Row>
           <Col md={3}>

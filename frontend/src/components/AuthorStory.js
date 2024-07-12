@@ -3,7 +3,9 @@ import { useLocation } from "react-router-dom";
 const AuthorStory = () => {
   const location = useLocation();
   const author = location.state;
+
   const imageUrl = `/images/Authors/${author.name}.png`;
+
   return (
     <div>
       <div>
@@ -23,14 +25,6 @@ const AuthorStory = () => {
             {author.biography.split("\n\n").map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
-
-            {/* <p style={{ letterSpacing: "0.05em", marginTop: "40px" }}>
-              {author.biography.split("\n\n")[0]}
-            </p>
-
-            <p style={{ letterSpacing: "0.05em", marginTop: "20px" }}>
-              {author.biography.split("\n\n")[1]}
-            </p> */}
           </div>
         </div>
       </div>

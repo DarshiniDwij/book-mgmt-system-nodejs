@@ -13,9 +13,10 @@ const AuthorOffCanvas = ({ handleCallBack, show, handleClose, authorData }) => {
 
   useEffect(() => {
     if (authorData) {
+      console.log(authorData.biography);
       setId(authorData.author_id || "");
       setName(authorData.name || "");
-      setBiography(authorData.biography | "");
+      setBiography(authorData.biography || "");
     }
   }, [authorData]);
 

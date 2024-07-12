@@ -13,6 +13,8 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
 
   const [show, setShow] = useState(false);
 
+  const imageUrl = `/images/Books/${book.title}.png`;
+
   const handleClose = () => setShow(false);
 
   const handleMouseEnter = () => {
@@ -95,7 +97,7 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <Card.Img variant="top" src="/images/test.png" />
+          <Card.Img variant="top" src={imageUrl} />
           <Card.Body>
             <Card.Title>{book.title}</Card.Title>
             <Card.Text>{book.price}</Card.Text>

@@ -13,7 +13,6 @@ const BookModal = (props) => {
   const handleoffCanvas = () => {
     handleClose();
     props.onHandleCallBack(props.book);
-    // props.onHide();
   };
 
   const handleDelete = () => {

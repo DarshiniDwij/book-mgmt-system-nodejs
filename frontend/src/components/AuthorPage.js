@@ -30,7 +30,7 @@ const AuthorPage = () => {
     if (index !== -1) {
       let updatedAuthors = [
         ...authors.slice(0, index), // all books before the updated book
-        updatedAuthor, // updated book
+        updatedAuthor, // updated author
         ...authors.slice(index + 1), // all books after the updated book
       ];
       setAuthors(updatedAuthors);
@@ -39,6 +39,41 @@ const AuthorPage = () => {
       console.log("updation started2");
       setAuthors([...authors, updatedAuthor]);
       handleShowToast("Author created Succesfully", "success");
+    }
+  };
+
+  const onHandleDeleteCallBack = (item) => {
+    console.log("deletion started1");
+    let index = authors.findIndex(
+      (author) => author.author_id === item.author_id
+    );
+    if (index !== -1) {
+      console.log("deletion started2");
+      console.log(item.author_id);
+      deleteAuthor(item.author_id);
+    } else {
+      console.log("unable to find the author");
+    }
+  };
+
+  const deleteAuthor = async (authorId) => {
+    try {
+      console.log(authorId);
+      await fetch("http://localhost:3000/api/author/author/" + authorId, {
+        method: "DELETE",
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error("author not Deleted");
+        }
+        const updatedAuthors = authors.filter(
+          (author) => author.author_id !== authorId
+        );
+        setAuthors(updatedAuthors);
+        handleShowToast("Author deleted Succesfully", "success");
+        // return response.json();
+      });
+    } catch (error) {
+      console.error(`Error deleting author with ID ${authorId}:`, error);
     }
   };
 
@@ -72,14 +107,13 @@ const AuthorPage = () => {
       <Container>
         <Row>
           <Col md={3}>
-            <div>Div fro search bar</div>
-
             <Button
               className="w-100 custom-borderless-btn"
               style={{
                 backgroundColor: "#0E345A",
                 border: "none",
                 width: "200px",
+                marginTop: "150px",
               }}
               onClick={() => handleAuthorOffCanvas()}
             >
@@ -105,7 +139,12 @@ const AuthorPage = () => {
               <div>
                 <div className="book-list">
                   {authors.map((author, index) => (
-                    <AuthorCard key={index} author={author}></AuthorCard>
+                    <AuthorCard
+                      key={index}
+                      author={author}
+                      onHandleDeleteCallBack={onHandleDeleteCallBack}
+                      handleCallBack={handleCallBack}
+                    ></AuthorCard>
                   ))}
                 </div>
               </div>

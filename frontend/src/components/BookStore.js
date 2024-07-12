@@ -60,7 +60,7 @@ const BookStore = () => {
         }
       ).then((response) => {
         if (!response.ok) {
-          throw new Error("Book Deleted");
+          throw new Error("Book not Deleted");
         }
         const updatedBooks = books.filter((book) => book.book_id !== bookId);
         setBooks(updatedBooks);

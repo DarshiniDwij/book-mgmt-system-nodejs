@@ -191,5 +191,41 @@ body {
     width: 100%; /* Optionally set width for the container */
     padding: 20px; /* Add padding to the container */
   }
+
+  .icon-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .icon-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .icon {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: white;
+  }
+
+  .top-books-carousel {
+    display: flex;
+    flex-wrap: nowrap; /* Ensures items stay in a single line */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    gap: 20px; /* Adjust as per your design */
+    padding: 20px; /* Adjust as per your design */
+  }
+  
+  .top-books-carousel > * {
+    flex: 0 0 auto; /* Ensures items do not shrink or grow */
+  }
+  
   
   

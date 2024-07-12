@@ -13,6 +13,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedLang, setSelectedLang] = useState("");
   const [amount, setAmount] = useState("");
+  const [booksPresent, setBooksPresent] = useState("");
+  const [booksSold, setBooksSold] = useState("");
   const [title, setTitle] = useState("");
   const [id, setId] = useState("");
   const [validated, setValidated] = useState(false);
@@ -25,6 +27,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
     date: "",
     language: "",
     cost: "",
+    booksPresent: "",
+    booksSold: "",
   });
 
   useEffect(() => {
@@ -40,6 +44,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
       setSelectedLang(bookData.language || "");
       setAmount(bookData.price || "");
       setDescription(bookData.description || "");
+      setBooksPresent(bookData.booksPresent || "");
+      setBooksSold(bookData.booksSold || "");
     }
   }, [bookData]);
 
@@ -60,6 +66,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
         price: parseFloat(amount.replace(/[^\d.-]/g, "")).toFixed(2),
         description: description,
         imagePath: title + ".png",
+        booksPresent: booksPresent,
+        booksSold: booksSold,
       };
 
       try {
@@ -128,6 +136,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
     setSelectedLang("");
     setAmount("");
     setDescription("");
+    setBooksPresent("");
+    setBooksSold("");
 
     setErrors({
       title: "",
@@ -138,6 +148,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
       date: "",
       language: "",
       cost: "",
+      booksPresent: "",
+      booksSold: "",
     });
   };
 
@@ -167,6 +179,14 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
     }
     if (!description.trim()) {
       newErrors.description = "Description is required";
+      valid = false;
+    }
+    if (!booksPresent) {
+      newErrors.booksPresent = "Number of books in stock is required";
+      valid = false;
+    }
+    if (!booksSold) {
+      newErrors.booksSold = "Number of sold is required";
       valid = false;
     }
 
@@ -203,6 +223,16 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
     const value = event.target.value.replace(/\D/g, "");
     setAmount(value);
     setErrors({ ...errors, cost: "" });
+  };
+
+  const handleBooksPresentChange = (event) => {
+    setBooksPresent(event.target.value);
+    setErrors({ ...errors, booksPresent: "" });
+  };
+
+  const handleBooksSold = (event) => {
+    setBooksSold(event.target.value);
+    setErrors({ ...errors, booksSold: "" });
   };
 
   const handleAuthorChange = (event) => {
@@ -394,6 +424,42 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.cost}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Number of Books in Stock
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  value={booksPresent}
+                  onChange={handleBooksPresentChange}
+                  placeholder="Enter Number of Books"
+                  className="form-control"
+                  required
+                  isInvalid={!!errors.booksPresent}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.booksPresent}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Number of Books Sold
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  value={booksSold}
+                  onChange={handleBooksSold}
+                  placeholder="Enter Number of Sold"
+                  className="form-control"
+                  required
+                  isInvalid={!!errors.booksSold}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.booksSold}
                 </Form.Control.Feedback>
               </Form.Group>
 

@@ -19,14 +19,14 @@ const BookModal = (props) => {
     props.onHandleDeleteCallBack1(props.book);
   };
 
-  console.log("author");
-  console.log(props.author_name);
+  // console.log("author");
+  // console.log(props.author_name);
 
-  console.log("genre");
-  console.log(props.genre);
+  // console.log("genre");
+  // console.log(props.genre);
 
-  console.log("inside modal");
-  console.log(props);
+  // console.log("inside modal");
+  // console.log(props);
 
   return (
     <div>

@@ -36,24 +36,13 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
     onHandleDeleteCallBack(item);
   };
 
-  // const handleCallBack = (item) => {
-  //   console.log("Updated book is :");
-  //   console.log(item);
-  //   props.onHandleCallBack(item);
-  // };
-
-  console.log("*******");
-  // console.log(props);
-  console.log(modalShow);
-
   const fetchAuthor = async () => {
     try {
       const response1 = await fetch(
         `http://localhost:3000/api/author/author/${book.author_id}`
       );
       const data1 = await response1.json();
-      console.log("response");
-      console.log(data1);
+
       setAuthor(data1.name); // Assuming API response is JSON with book details
     } catch (error) {
       console.error("Error fetching book details:", error);
@@ -62,8 +51,6 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
 
   const fetchGenre = async () => {
     try {
-      console.log("Jjjjjjjjjjjjjjjjjjjjjjjjj");
-      console.log(book.genre_id);
       const response2 = await fetch(
         `http://localhost:3000/api/genre/${book.genre_id}`
       );
@@ -75,14 +62,16 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
     }
   };
 
-  const onClickEventHandler = () => {
-    fetchAuthor();
-    console.log("author is :");
-    console.log(author);
-    fetchGenre();
-    console.log("genre is :");
-    console.log(genre);
-    setModalShow(true);
+  const onClickEventHandler = async () => {
+    try {
+      await fetchAuthor();
+
+      await fetchGenre();
+
+      setModalShow(true);
+    } catch (error) {
+      console.error("Error handling onClickEventHandler:", error);
+    }
   };
 
   return (

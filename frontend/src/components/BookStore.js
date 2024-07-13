@@ -7,6 +7,9 @@ import { Button } from "react-bootstrap";
 import ItemOffCanvas from "./ItemOffCanvas";
 import ToastComponent from "./ToastComponent";
 import GenreOffCanvas from "./GenreOffCanvas";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+
 const BookStore = () => {
   // const { id } = useParams();
   const [books, setBooks] = useState(null);
@@ -16,6 +19,9 @@ const BookStore = () => {
   const [showToast, setShowToast] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [genres, setGenres] = useState([]);
+
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState(null);
 
   const [show, setShow] = useState(false);
   const [genreShow, setGenreShow] = useState(false);
@@ -28,6 +34,28 @@ const BookStore = () => {
 
   const handleGenreClose = () => setGenreShow(false);
   const handleGenreShow = () => setGenreShow(true);
+
+  const handleAuthorClick = (authorId) => {
+    if (authorId) {
+      setSelectedAuthor(authorId);
+    } else {
+      setSelectedAuthor("");
+    }
+  };
+
+  const handleGenreClick = (genreId) => {
+    if (genreId) {
+      setSelectedGenre(genreId);
+    } else {
+      setSelectedGenre("");
+    }
+  };
+
+  const filteredBooks = selectedAuthor
+    ? books.filter((book) => book.author_id === selectedAuthor)
+    : selectedGenre
+    ? books.filter((book) => book.genre_id === selectedGenre)
+    : books;
 
   const handleShowToast = (message, variant) => {
     setToastMessage(message);
@@ -100,8 +128,8 @@ const BookStore = () => {
     }
   };
 
-  console.log("books are");
-  console.log(books);
+  // console.log("books are");
+  // console.log(books);
 
   const toggleAuthorList = () => {
     setAuthorShowList(!showAuthorList);
@@ -130,7 +158,7 @@ const BookStore = () => {
     // Fetch book details from API
 
     fetchBookDetails();
-  }, [books]);
+  }, []);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -181,7 +209,24 @@ const BookStore = () => {
       <Container>
         <Row>
           <Col md={3}>
-            <div>
+            <div style={{ marginTop: "2rem" }}>
+              <h5 style={{ textAlign: "left" }}>Search By</h5>
+              <div
+                className="filter-divider"
+                style={{ marginBottom: "5px", alignItems: "left" }}
+              >
+                <hr />
+              </div>
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+                <Form.Control
+                  placeholder="Book name"
+                  aria-label="Book"
+                  aria-describedby="basic-book"
+                />
+              </InputGroup>
+            </div>
+            <div style={{ marginTop: "2rem" }}>
               <h5 style={{ textAlign: "left" }}>Filter By</h5>
               <div
                 className="filter-divider"
@@ -189,61 +234,88 @@ const BookStore = () => {
               >
                 <hr />
               </div>
-              <br />
+              {/* <br /> */}
 
               <button
                 className="filter-button"
                 onClick={toggleAuthorList}
-                style={{ width: "200px" }}
+                style={{ width: "100%" }}
               >
-                {showAuthorList ? "Authors     -" : "Authors     +"}
+                Authors {showAuthorList ? <span>-</span> : <span>+</span>}
               </button>
-              <div style={{ display: showAuthorList ? "block" : "none" }}>
-                <ul className="filter-list">
-                  {authors.map((author) => (
-                    <li key={author.author_id}>{author.name}</li>
-                  ))}
-                </ul>
-              </div>
-              <br />
+              {showAuthorList && (
+                <div>
+                  <ul className="filter-list">
+                    <li key={""} onClick={() => handleAuthorClick("")}>
+                      <b>All</b>
+                    </li>
+                    {authors.map((author) => (
+                      <li
+                        key={author.author_id}
+                        onClick={() => handleAuthorClick(author.author_id)}
+                      >
+                        {author.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {/* <br /> */}
 
               <div className="filter-divider" style={{ marginBottom: "5px" }}>
                 <hr />
               </div>
 
-              <br />
+              {/* <br /> */}
 
-              <button className="filter-button" onClick={toggleGenreList}>
-                {showAuthorList ? "Genre     -" : "Genre     +"}
+              <button
+                className="filter-button"
+                onClick={toggleGenreList}
+                style={{ width: "100%" }}
+              >
+                Genre {showAuthorList ? <span>-</span> : <span>+</span>}
               </button>
               <div style={{ display: showGenreList ? "block" : "none" }}>
                 <ul className="filter-list">
+                  <li key={""} onClick={() => handleGenreClick("")}>
+                    <b>All</b>
+                  </li>
                   {genres.map((genre) => (
-                    <li key={genres.genre_id}>{genre.genre_name}</li>
+                    <li
+                      key={genre.genre_id}
+                      onClick={() => handleGenreClick(genre.genre_id)}
+                    >
+                      {genre.genre_name}
+                    </li>
                   ))}
                 </ul>
               </div>
 
-              <br />
+              {/* <br /> */}
 
               <div className="filter-divider" style={{ marginBottom: "5px" }}>
                 <hr />
               </div>
 
-              <br />
+              {/* <br /> */}
 
-              <button className="filter-button" onClick={togglePriceList}>
-                {showAuthorList ? "Price     -" : "Price     +"}
+              <button
+                className="filter-button"
+                onClick={togglePriceList}
+                style={{ width: "100%" }}
+              >
+                Language {showAuthorList ? <span>-</span> : <span>+</span>}
               </button>
               <div style={{ display: showPrice ? "block" : "none" }}>
                 <ul>
-                  <li>Item 1</li>
-                  <li>Item 2</li>
-                  <li>Item 3</li>
+                  <li>All</li>
+                  <li>Kannada</li>
+                  <li>English</li>
+                  <li>Others</li>
                 </ul>
               </div>
 
-              <br />
+              {/* <br /> */}
 
               <div className="filter-divider" style={{ marginBottom: "30px" }}>
                 <hr />
@@ -286,7 +358,7 @@ const BookStore = () => {
                 handleGenreClose={handleGenreClose}
               ></GenreOffCanvas>
 
-              <br />
+              {/* <br /> */}
             </div>
           </Col>
           <Col md={9}>
@@ -297,7 +369,7 @@ const BookStore = () => {
               </div>
               <div>
                 <div className="book-list">
-                  {books.map(
+                  {filteredBooks.map(
                     (book, index) =>
                       book && (
                         <ProductCard

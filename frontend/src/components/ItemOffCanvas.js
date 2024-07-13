@@ -13,8 +13,8 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedLang, setSelectedLang] = useState("");
   const [amount, setAmount] = useState("");
-  const [booksPresent, setBooksPresent] = useState("");
-  const [booksSold, setBooksSold] = useState("");
+  const [booksPresent, setBooksPresent] = useState(0);
+  const [booksSold, setBooksSold] = useState(0);
   const [title, setTitle] = useState("");
   const [id, setId] = useState("");
   const [validated, setValidated] = useState(false);
@@ -92,6 +92,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
           resetForm();
         } else {
           console.log("enter the new");
+          console.log(newBook);
           // Create new book
           response = await fetch("http://localhost:3000/api/books/createBook", {
             method: "POST",
@@ -432,7 +433,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
                   Number of Books in Stock
                 </Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={booksPresent}
                   onChange={handleBooksPresentChange}
                   placeholder="Enter Number of Books"
@@ -450,7 +451,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
                   Number of Books Sold
                 </Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={booksSold}
                   onChange={handleBooksSold}
                   placeholder="Enter Number of Sold"

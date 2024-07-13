@@ -59,7 +59,7 @@ body {
     width: 50%;
     margin-top: 1px; 
     margin-bottom: 1px;
-    display: inline-block; /* Adjust margin for spacing */
+    display: contents; /* Adjust margin for spacing */
 }
 
 .filter-divider hr {
@@ -69,6 +69,8 @@ body {
 }
 
 .filter-button{
+  display: flex;
+  justify-content: space-between;
 
   margin-right: auto;
     padding: 10px 20px; 
@@ -176,7 +178,7 @@ body {
 
   .filter-list {
     list-style: none; /* Remove bullet points */
-    padding-left: 0; /* Remove default padding */
+    padding-left: 2rem; /* Remove default padding */
   }
   
   .filter-list li {

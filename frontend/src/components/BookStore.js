@@ -1,61 +1,89 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Container, Row, Col, Button, Form, InputGroup } from "react-bootstrap";
 import ProductCard from "./ProductCard";
-import { Button } from "react-bootstrap";
 import ItemOffCanvas from "./ItemOffCanvas";
 import ToastComponent from "./ToastComponent";
 import GenreOffCanvas from "./GenreOffCanvas";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 
 const BookStore = () => {
-  // const { id } = useParams();
-  const [books, setBooks] = useState(null);
+  const [books, setBooks] = useState([]);
+  const [authors, setAuthors] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedLang, setSelectedLang] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVariant, setToastVariant] = useState("success");
   const [showAuthorList, setAuthorShowList] = useState(false);
   const [showGenreList, setGenreList] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [authors, setAuthors] = useState([]);
-  const [genres, setGenres] = useState([]);
-
-  const [selectedAuthor, setSelectedAuthor] = useState(null);
-  const [selectedGenre, setSelectedGenre] = useState(null);
-
   const [show, setShow] = useState(false);
   const [genreShow, setGenreShow] = useState(false);
 
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastVariant, setToastVariant] = useState("success");
+  const fetchBookDetails = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/books/");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setBooks(data);
+    } catch (error) {
+      console.error("Error fetching book details:", error);
+    }
+  };
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  useEffect(() => {
+    fetchBookDetails();
+  }, []);
 
-  const handleGenreClose = () => setGenreShow(false);
-  const handleGenreShow = () => setGenreShow(true);
+  useEffect(() => {
+    console.log("Books updated:", books);
+    // Apply filters here if needed based on other states like selectedAuthor, selectedGenre, etc.
+  }, [books]);
+
+  useEffect(() => {
+    if (books) {
+      applyFilters(searchTerm, selectedAuthor, selectedGenre, selectedLang);
+    }
+  }, [books, searchTerm, selectedAuthor, selectedGenre, selectedLang]);
+
+  const applyFilters = (
+    searchTerm,
+    selectedAuthor,
+    selectedGenre,
+    selectedLang
+  ) => {
+    if (!books) return;
+    setLoading(true);
+    let filtered = books.filter((book) => {
+      return (
+        (searchTerm === "" ||
+          book.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (selectedAuthor === null || book.author_id === selectedAuthor) &&
+        (selectedGenre === null || book.genre_id === selectedGenre) &&
+        (selectedLang === null || book.language === selectedLang)
+      );
+    });
+    setFilteredBooks(filtered);
+    setLoading(false);
+  };
 
   const handleAuthorClick = (authorId) => {
-    if (authorId) {
-      setSelectedAuthor(authorId);
-    } else {
-      setSelectedAuthor("");
-    }
+    setSelectedAuthor(authorId === selectedAuthor ? null : authorId);
   };
 
   const handleGenreClick = (genreId) => {
-    if (genreId) {
-      setSelectedGenre(genreId);
-    } else {
-      setSelectedGenre("");
-    }
+    setSelectedGenre(genreId === selectedGenre ? null : genreId);
   };
 
-  const filteredBooks = selectedAuthor
-    ? books.filter((book) => book.author_id === selectedAuthor)
-    : selectedGenre
-    ? books.filter((book) => book.genre_id === selectedGenre)
-    : books;
+  const handleLangClick = (lang) => {
+    setSelectedLang(lang === selectedLang ? null : lang);
+  };
 
   const handleShowToast = (message, variant) => {
     setToastMessage(message);
@@ -63,102 +91,42 @@ const BookStore = () => {
     setShowToast(true);
   };
 
-  // const handleCallBack = (newBook) => {
-  //   console.log(newBook);
-  //   setBooks([...books, newBook]);
-  // };
-
-  const onHandleDeleteCallBack = (item) => {
-    console.log("deletion started");
-    let index = books.findIndex((book) => book.book_id === item.book_id);
-    if (index !== -1) {
-      console.log("deletion started1");
-      deleteBook(item.book_id);
-    } else {
-      console.log("unable to find the book");
-    }
-  };
-
-  const deleteBook = async (bookId) => {
+  const onHandleDeleteCallBack = async (item) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/books/" + bookId,
+        `http://localhost:3000/api/books/${item.book_id}`,
         {
           method: "DELETE",
         }
-      ).then((response) => {
-        if (!response.ok) {
-          throw new Error("Book not Deleted");
-        }
-        const updatedBooks = books.filter((book) => book.book_id !== bookId);
-        setBooks(updatedBooks);
-        handleShowToast("Book deleted Succesfully", "success");
-        // return response.json();
-      });
+      );
+      if (!response.ok) {
+        throw new Error("Book not Deleted");
+      }
+      const updatedBooks = books.filter(
+        (book) => book.book_id !== item.book_id
+      );
+      setBooks(updatedBooks);
+      handleShowToast("Book deleted Successfully", "success");
     } catch (error) {
-      console.error(`Error deleting book with ID ${bookId}:`, error);
+      console.error(`Error deleting book with ID ${item.book_id}:`, error);
     }
-  };
-
-  const handleGenreCallBack = (newGenre) => {
-    setGenres([...genres, newGenre]);
-    handleShowToast("Genre created Succesfully", "success");
   };
 
   const handleCallBack = (updatedBook) => {
-    console.log("updation started");
-    console.log(updatedBook);
-    let index = books.findIndex((book) => book.book_id === updatedBook.id);
+    let index = books.findIndex((book) => book.book_id === updatedBook.book_id);
     if (index !== -1) {
-      console.log("updation started1");
-      // Update the book using spread operator
       let updatedBooks = [
-        ...books.slice(0, index), // all books before the updated book
-        updatedBook, // updated book
-        ...books.slice(index + 1), // all books after the updated book
+        ...books.slice(0, index),
+        updatedBook,
+        ...books.slice(index + 1),
       ];
-
-      // Now updatedBooks contains the updated array of books
       setBooks(updatedBooks);
-      handleShowToast("book updated Succesfully", "success");
+      handleShowToast("Book updated Successfully", "success");
     } else {
-      console.log("updation started2");
       setBooks([...books, updatedBook]);
-      handleShowToast("book created Succesfully", "success");
+      handleShowToast("Book created Successfully", "success");
     }
   };
-
-  // console.log("books are");
-  // console.log(books);
-
-  const toggleAuthorList = () => {
-    setAuthorShowList(!showAuthorList);
-  };
-
-  const toggleGenreList = () => {
-    setGenreList(!showGenreList);
-  };
-
-  const togglePriceList = () => {
-    setShowPrice(!showPrice);
-  };
-
-  const fetchBookDetails = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/books/");
-      const data = await response.json();
-      console.log("response");
-      setBooks(data); // Assuming API response is JSON with book details
-    } catch (error) {
-      console.error("Error fetching book details:", error);
-    }
-  };
-
-  useEffect(() => {
-    // Fetch book details from API
-
-    fetchBookDetails();
-  }, []);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -192,16 +160,29 @@ const BookStore = () => {
     fetchAuthors();
   }, []);
 
-  if (!books) {
-    return <div>Loading the page...</div>; // Add loading state if data is being fetched
-  }
-
-  const handleoffCanvas = (event) => {
-    handleShow();
+  const handleGenreCallBack = (newGenre) => {
+    setGenres([...genres, newGenre]);
+    handleShowToast("Genre created Successfully", "success");
   };
 
-  const handleGenreOffCanvas = (event) => {
-    handleGenreShow();
+  const toggleAuthorList = () => {
+    setAuthorShowList(!showAuthorList);
+  };
+
+  const toggleGenreList = () => {
+    setGenreList(!showGenreList);
+  };
+
+  const togglePriceList = () => {
+    setShowPrice(!showPrice);
+  };
+
+  const handleoffCanvas = () => {
+    setShow(true);
+  };
+
+  const handleGenreOffCanvas = () => {
+    setGenreShow(true);
   };
 
   return (
@@ -223,6 +204,7 @@ const BookStore = () => {
                   placeholder="Book name"
                   aria-label="Book"
                   aria-describedby="basic-book"
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </InputGroup>
             </div>
@@ -234,7 +216,6 @@ const BookStore = () => {
               >
                 <hr />
               </div>
-              {/* <br /> */}
 
               <button
                 className="filter-button"
@@ -246,7 +227,7 @@ const BookStore = () => {
               {showAuthorList && (
                 <div>
                   <ul className="filter-list">
-                    <li key={""} onClick={() => handleAuthorClick("")}>
+                    <li key={""} onClick={() => handleAuthorClick(null)}>
                       <b>All</b>
                     </li>
                     {authors.map((author) => (
@@ -260,24 +241,21 @@ const BookStore = () => {
                   </ul>
                 </div>
               )}
-              {/* <br /> */}
 
               <div className="filter-divider" style={{ marginBottom: "5px" }}>
                 <hr />
               </div>
-
-              {/* <br /> */}
 
               <button
                 className="filter-button"
                 onClick={toggleGenreList}
                 style={{ width: "100%" }}
               >
-                Genre {showAuthorList ? <span>-</span> : <span>+</span>}
+                Genre {showGenreList ? <span>-</span> : <span>+</span>}
               </button>
               <div style={{ display: showGenreList ? "block" : "none" }}>
                 <ul className="filter-list">
-                  <li key={""} onClick={() => handleGenreClick("")}>
+                  <li key={""} onClick={() => handleGenreClick(null)}>
                     <b>All</b>
                   </li>
                   {genres.map((genre) => (
@@ -291,31 +269,27 @@ const BookStore = () => {
                 </ul>
               </div>
 
-              {/* <br /> */}
-
               <div className="filter-divider" style={{ marginBottom: "5px" }}>
                 <hr />
               </div>
-
-              {/* <br /> */}
 
               <button
                 className="filter-button"
                 onClick={togglePriceList}
                 style={{ width: "100%" }}
               >
-                Language {showAuthorList ? <span>-</span> : <span>+</span>}
+                Language {showPrice ? <span>-</span> : <span>+</span>}
               </button>
               <div style={{ display: showPrice ? "block" : "none" }}>
-                <ul>
-                  <li>All</li>
-                  <li>Kannada</li>
-                  <li>English</li>
-                  <li>Others</li>
+                <ul className="filter-list">
+                  <li onClick={() => handleLangClick(null)}>
+                    <b>All</b>
+                  </li>
+                  <li onClick={() => handleLangClick("Kannada")}>Kannada</li>
+                  <li onClick={() => handleLangClick("English")}>English</li>
+                  <li onClick={() => handleLangClick("Others")}>Others</li>
                 </ul>
               </div>
-
-              {/* <br /> */}
 
               <div className="filter-divider" style={{ marginBottom: "30px" }}>
                 <hr />
@@ -349,16 +323,14 @@ const BookStore = () => {
               <ItemOffCanvas
                 handleCallBack={handleCallBack}
                 show={show}
-                handleClose={handleClose}
-              ></ItemOffCanvas>
+                handleClose={() => setShow(false)}
+              />
 
               <GenreOffCanvas
                 handleGenreCallBack={handleGenreCallBack}
                 genreShow={genreShow}
-                handleGenreClose={handleGenreClose}
-              ></GenreOffCanvas>
-
-              {/* <br /> */}
+                handleGenreClose={() => setGenreShow(false)}
+              />
             </div>
           </Col>
           <Col md={9}>
@@ -369,17 +341,18 @@ const BookStore = () => {
               </div>
               <div>
                 <div className="book-list">
-                  {filteredBooks.map(
-                    (book, index) =>
-                      book && (
-                        <ProductCard
-                          key={index}
-                          book={book}
-                          handleCallBack={handleCallBack}
-                          onHandleDeleteCallBack={onHandleDeleteCallBack}
-                          buttonBorderStyle={"none"}
-                        />
-                      )
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : (
+                    filteredBooks.map((book, index) => (
+                      <ProductCard
+                        key={index}
+                        book={book}
+                        handleCallBack={handleCallBack}
+                        onHandleDeleteCallBack={onHandleDeleteCallBack}
+                        buttonBorderStyle={"none"}
+                      />
+                    ))
                   )}
                 </div>
               </div>
@@ -396,4 +369,5 @@ const BookStore = () => {
     </div>
   );
 };
+
 export default BookStore;

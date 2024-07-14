@@ -8,6 +8,7 @@ const BookModal = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
+  // const imageUrl =;
   // const handleShow = () => setShow(true);
 
   const handleoffCanvas = () => {
@@ -17,6 +18,19 @@ const BookModal = (props) => {
 
   const handleDelete = () => {
     props.onHandleDeleteCallBack1(props.book);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    return date.toLocaleString("en-US", options);
   };
 
   // console.log("author");
@@ -42,9 +56,9 @@ const BookModal = (props) => {
               <Row>
                 <Col xs={6} md={6}>
                   <img
-                    src="/images/test.png"
+                    src={`/images/Books/${props.book.title}.png`}
                     alt="testimage"
-                    style={{ marginBottom: "30px" }}
+                    style={{ marginBottom: "30px", height: "400px" }}
                   />
                 </Col>
                 <Col xs={6} md={6}>
@@ -52,14 +66,48 @@ const BookModal = (props) => {
                     <h3>{props.book.title}</h3>
                   </span>
                   <br />
-                  <span>Author : {props.author}</span>
+                  <span>
+                    <b>Author :</b> {props.author}
+                  </span>
                   <br />
-                  <span>Genre :{props.genre}</span>
+                  <span>
+                    <b>Genre :</b>
+                    {props.genre}
+                  </span>
                   <br />
-                  <span>published Date:{props.book.publication_date}</span>
+                  <span>
+                    <b> Published Date:</b>
+                    {formatDate(props.book.publication_date)}
+                  </span>
                   <br />
-                  <span>Description:{props.book.description}</span>
-                  <div className="button1-container">
+                  <span>
+                    <b> Price:</b>
+                    {props.book.price}
+                  </span>
+                  <br />
+                  <span>
+                    <b> No Of Book:</b>
+                    {props.book.booksPresent}
+                  </span>
+                  <br />
+                  <span>
+                    <b> Books sold:</b>
+                    {props.book.booksSold}
+                  </span>
+                  <br />
+                  <span>
+                    <b> Language:</b>
+                    {props.book.language}
+                  </span>
+                  <br />
+                  <span>
+                    <b>Description:</b>
+                    {props.book.description}
+                  </span>
+                  <div
+                    className="button1-container"
+                    style={{ marginTop: "20px" }}
+                  >
                     <button
                       className="modal-button"
                       onClick={() => handleoffCanvas()}

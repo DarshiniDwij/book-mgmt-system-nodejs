@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import BookModal from "./BookModal";
 import ItemOffCanvas from "./ItemOffCanvas";
-const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
+const ProductCard = ({
+  book,
+  handleCallBack,
+  onHandleDeleteCallBack,
+  backgroundColor,
+  color,
+  buttonBorderStyle,
+}) => {
   const [showFooter, setShowFooter] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
@@ -87,7 +94,7 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
           onMouseLeave={handleMouseLeave}
         >
           <Card.Img variant="top" src={imageUrl} />
-          <Card.Body>
+          <Card.Body style={{ backgroundColor: backgroundColor, color: color }}>
             <Card.Title>{book.title}</Card.Title>
             <Card.Text>{book.price}</Card.Text>
           </Card.Body>
@@ -99,7 +106,10 @@ const ProductCard = ({ book, handleCallBack, onHandleDeleteCallBack }) => {
             >
               <Button
                 className="w-100 custom-borderless-btn"
-                style={{ backgroundColor: "#0E345A", border: "none" }}
+                style={{
+                  backgroundColor: "#0E345A",
+                  border: buttonBorderStyle,
+                }}
                 onClick={() => onClickEventHandler()}
               >
                 View Details

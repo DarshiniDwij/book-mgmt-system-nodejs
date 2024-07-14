@@ -1,11 +1,17 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const TopBooksCarousel = ({ bestsellingBooks }) => {
+const TopBooksCarousel = ({ books }) => {
   return (
     <div className="top-books-carousel">
-      {bestsellingBooks.map((book) => (
-        <ProductCard key={book.id} book={book} />
+      {books.map((book) => (
+        <ProductCard
+          key={book.id}
+          book={book}
+          backgroundColor={"#0E345A"}
+          color={"white"}
+          buttonBorderStyle={"3px solid white"}
+        />
       ))}
     </div>
   );

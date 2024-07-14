@@ -221,13 +221,29 @@ body {
     display: flex;
     flex-wrap: nowrap; /* Ensures items stay in a single line */
     overflow-x: auto; /* Enables horizontal scrolling */
-    gap: 20px; /* Adjust as per your design */
+    gap: 40px; /* Adjust as per your design */
     padding: 20px; /* Adjust as per your design */
+    width: 80%;
+    margin: 0 auto;
   }
   
   .top-books-carousel > * {
     flex: 0 0 auto; /* Ensures items do not shrink or grow */
   }
+
+  .transparent-card-body {
+    background-color: transparent !important;
+  }
+
+  /* Hide scrollbar for WebKit browsers */
+.top-books-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Optional: Hide scrollbar for Firefox */
+.top-books-carousel {
+  scrollbar-width: none;
+}
   
   
   

@@ -377,6 +377,7 @@ const BookStore = () => {
                           book={book}
                           handleCallBack={handleCallBack}
                           onHandleDeleteCallBack={onHandleDeleteCallBack}
+                          buttonBorderStyle={"none"}
                         />
                       )
                   )}

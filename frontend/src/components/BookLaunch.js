@@ -2,26 +2,56 @@ import React, { useState, useEffect } from "react";
 import "./BookLaunch.css";
 
 const BookLaunch = () => {
-  const [book, setBook] = useState(null);
+  const [book, setBook] = useState({});
+  const [author, setAuthor] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchBookDetails(); // Fetch book publish details when component mounts
-  }, []);
+    const fetchBookAndAuthorDetails = async () => {
+      try {
+        const bookResponse = await fetch(
+          "http://localhost:3000/api/books/upcomingPublication/books/"
+        );
+        if (!bookResponse.ok) {
+          throw new Error("Failed to fetch book details");
+        }
+        const bookData = await bookResponse.json();
+        setBook(bookData);
+        setLoading(false);
 
-  const fetchBookDetails = async () => {
-    try {
-      console.log("fetch started");
-      const response = await fetch("http://localhost:3000/api/books/2"); // Replace with your API endpoint
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // Fetch author details only if bookData.author_id exists
+        if (bookData.author_id) {
+          const authorResponse = await fetch(
+            `http://localhost:3000/api/author/author/${bookData.author_id}`
+          );
+          if (!authorResponse.ok) {
+            throw new Error("Failed to fetch author details");
+          }
+          const authorData = await authorResponse.json();
+          setAuthor(authorData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
       }
-      const data = await response.json();
-      setBook(data); // Set book state with fetched data
-      console.log("fetch complete");
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching book details:", error);
-    }
+    };
+
+    fetchBookAndAuthorDetails();
+  }, []);
+  // const formattedDate = formatDate(book.publication_date);
+  const imageUrl = `/images/Books/${book.title}.png`;
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    return date.toLocaleString("en-US", options);
   };
 
   return (
@@ -37,23 +67,25 @@ const BookLaunch = () => {
       </div>
 
       <div className="book-container">
-        {book ? (
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
           <div className="book-details">
             <div className="book-info">
-              <h2>{book.title}</h2>
-              <p>Author : {book.author_id}</p>
-              <p>When : {book.genre}</p>
-              <p>{book.publication_date}</p>
-              <p>{process.env.PUBLIC_URL + "/images/" + book.imagePath} </p>
+              <p>
+                <h2>Book:{book.title}</h2>
+              </p>
+              {author && (
+                <p>
+                  <b>By:</b> {author.name}
+                </p>
+              )}
+              <p>
+                <b>When:</b> {formatDate(book.publication_date)}
+              </p>
             </div>
-            <img
-              src={process.env.PUBLIC_URL + "/images/" + book.imagePath}
-              alt={book.title}
-              className="book-image"
-            />
+            <img src={imageUrl} alt={book.title} className="book-image" />
           </div>
-        ) : (
-          <p>Loading...</p>
         )}
       </div>
     </div>

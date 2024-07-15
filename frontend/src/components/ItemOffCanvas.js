@@ -102,6 +102,7 @@ const ItemOffCanvas = ({ handleCallBack, show, handleClose, bookData }) => {
             body: JSON.stringify(newBook),
           });
           const data = await response.json();
+          console.log("the data is : ", data);
           handleCallBack(data);
           handleClose();
           resetForm();

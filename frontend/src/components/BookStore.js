@@ -47,7 +47,7 @@ const BookStore = () => {
 
   useEffect(() => {
     fetchBookDetails();
-  }, [books]);
+  }, []);
 
   useEffect(() => {
     console.log("Books updated:", books);
@@ -56,6 +56,7 @@ const BookStore = () => {
 
   useEffect(() => {
     if (books) {
+      console.log("Here");
       applyFilters(searchTerm, selectedAuthor, selectedGenre, selectedLang);
     }
   }, [books, searchTerm, selectedAuthor, selectedGenre, selectedLang]);
@@ -71,8 +72,8 @@ const BookStore = () => {
       return (
         (searchTerm === "" ||
           book.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (selectedAuthor === null || book.author_id === selectedAuthor) &&
-        (selectedGenre === null || book.genre_id === selectedGenre) &&
+        (selectedAuthor === null || book.author_id == selectedAuthor) &&
+        (selectedGenre === null || book.genre_id == selectedGenre) &&
         (selectedLang === null ||
           book.language.toLowerCase() === selectedLang.toLowerCase())
       );

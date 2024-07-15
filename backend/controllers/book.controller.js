@@ -23,6 +23,8 @@ const createBook = async (req, res) => {
     price: req.body.price,
     description: req.body.description,
     imagePath: req.body.imagePath,
+    booksPresent: req.body.booksPresent,
+    booksSold: req.body.booksSold,
   };
 
   // Save Book in database
@@ -147,17 +149,63 @@ const findAllPublished = async (req, res) => {
     });
 };
 
-const getTop10BestSellingBooks = async () => {
-  try {
-    await Book.findAll({
-      attributes: ["id", "title", "booksSold"],
-      order: [["booksSold", "DESC"]],
-      limit: 10,
+const getTop10BestSellingBooks = async (req, res) => {
+  await Book.findAll({
+    order: [["booksSold", "DESC"]],
+    limit: 10,
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching top selling books:", error);
+      throw error;
     });
-  } catch (error) {
-    console.error("Error fetching top selling books:", error);
-    throw error;
-  }
+};
+
+const fetchBooksThisMonth = async (req, res) => {
+  const startDate = new Date();
+  startDate.setDate(1); // Set to the first day of the current month
+  startDate.setHours(0, 0, 0, 0); // Start of the day
+
+  const endDate = new Date();
+  endDate.setMonth(endDate.getMonth() + 1); // Move to the next month
+  endDate.setDate(0); // Set to the last day of the current month
+  endDate.setHours(23, 59, 59, 999); // End of the day
+  await Book.findAll({
+    where: {
+      publication_date: {
+        [Op.between]: [startDate, endDate],
+      },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching top selling books:", error);
+      throw error;
+    });
+};
+
+const fetchUpComingPublicationBook = async (req, res) => {
+  const currentDate = new Date();
+  await Book.findOne({
+    where: {
+      publication_date: {
+        [Op.gt]: currentDate,
+      },
+    },
+    order: [["publication_date", "ASC"]],
+    limit: 1, // Order by publication_date ascending
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching upcoming publication books:", error);
+      throw error;
+    });
 };
 
 module.exports = {
@@ -169,4 +217,6 @@ module.exports = {
   findAllBooks,
   createBook,
   getTop10BestSellingBooks,
+  fetchBooksThisMonth,
+  fetchUpComingPublicationBook,
 };

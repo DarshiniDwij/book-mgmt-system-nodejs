@@ -24,5 +24,15 @@ router.delete("/:book_id", bookController.deleteBook);
 router.delete("/", bookController.deleteAll);
 
 // get top 10 best selling books
-router.get("/bestsellingBooks", bookController.getTop10BestSellingBooks);
+router.get("/bestsellingBooks/books", bookController.getTop10BestSellingBooks);
+
+// fetch all the books which has publication date for this month
+router.get("/thisMonthBooks/books", bookController.fetchBooksThisMonth);
+
+// fetch  book which has upcoming publication date.
+router.get(
+  "/upcomingPublication/books",
+  bookController.fetchUpComingPublicationBook
+);
+
 module.exports = router;

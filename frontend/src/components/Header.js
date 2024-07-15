@@ -42,7 +42,7 @@ function Header() {
             <Nav.Link href="/author" className="custom-nav-link">
               Authors
             </Nav.Link>
-            <NavDropdown
+            {/* <NavDropdown
               title="ADD ITEM"
               id="basic-nav-dropdown"
               className="custom-nav-link"
@@ -52,7 +52,7 @@ function Header() {
               <NavDropdown.Item href="#action/3.3" className="custom-nav-link">
                 Genre
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -118,7 +118,7 @@ body {
 .book-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Distributes items evenly */
+    justify-content: flex-start; /* Distributes items evenly */
     margin: -10px; /* Negative margin to counteract padding */
   }
   

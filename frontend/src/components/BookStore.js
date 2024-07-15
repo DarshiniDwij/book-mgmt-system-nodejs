@@ -4,6 +4,13 @@ import ProductCard from "./ProductCard";
 import ItemOffCanvas from "./ItemOffCanvas";
 import ToastComponent from "./ToastComponent";
 import GenreOffCanvas from "./GenreOffCanvas";
+import FadeLoader from "react-spinners/FadeLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  color: "#0E345A",
+};
 
 const BookStore = () => {
   const [books, setBooks] = useState([]);
@@ -14,7 +21,7 @@ const BookStore = () => {
   const [selectedLang, setSelectedLang] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
@@ -26,12 +33,13 @@ const BookStore = () => {
 
   const fetchBookDetails = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/books/");
+      const response = await fetch("http://localhost:3000/api/books");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
       setBooks(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching book details:", error);
     }
@@ -39,7 +47,7 @@ const BookStore = () => {
 
   useEffect(() => {
     fetchBookDetails();
-  }, []);
+  }, [books]);
 
   useEffect(() => {
     console.log("Books updated:", books);
@@ -59,18 +67,18 @@ const BookStore = () => {
     selectedLang
   ) => {
     if (!books) return;
-    setLoading(true);
     let filtered = books.filter((book) => {
       return (
         (searchTerm === "" ||
           book.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
         (selectedAuthor === null || book.author_id === selectedAuthor) &&
         (selectedGenre === null || book.genre_id === selectedGenre) &&
-        (selectedLang === null || book.language === selectedLang)
+        (selectedLang === null ||
+          book.language.toLowerCase() === selectedLang.toLowerCase())
       );
     });
     setFilteredBooks(filtered);
-    setLoading(false);
+    //setBooks(filtered);
   };
 
   const handleAuthorClick = (authorId) => {
@@ -121,9 +129,11 @@ const BookStore = () => {
         ...books.slice(index + 1),
       ];
       setBooks(updatedBooks);
+      // setFilteredBooks(books);
       handleShowToast("Book updated Successfully", "success");
     } else {
       setBooks([...books, updatedBook]);
+      // setFilteredBooks(books);
       handleShowToast("Book created Successfully", "success");
     }
   };
@@ -184,6 +194,14 @@ const BookStore = () => {
   const handleGenreOffCanvas = () => {
     setGenreShow(true);
   };
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 10000);
+
+  //   return () => clearTimeout(timer); // Clear the timeout if component unmounts
+  // }, []);
 
   return (
     <div style={{ backgroundColor: "white" }}>
@@ -287,7 +305,7 @@ const BookStore = () => {
                   </li>
                   <li onClick={() => handleLangClick("Kannada")}>Kannada</li>
                   <li onClick={() => handleLangClick("English")}>English</li>
-                  <li onClick={() => handleLangClick("Others")}>Others</li>
+                  <li onClick={() => handleLangClick("other")}>Other</li>
                 </ul>
               </div>
 
@@ -342,7 +360,15 @@ const BookStore = () => {
               <div>
                 <div className="book-list">
                   {loading ? (
-                    <p>Loading...</p>
+                    <div style={{ marginTop: "150px", marginLeft: "380px" }}>
+                      <FadeLoader
+                        loading={loading}
+                        size={50}
+                        cssOverride={override}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                      />
+                    </div>
                   ) : (
                     filteredBooks.map((book, index) => (
                       <ProductCard

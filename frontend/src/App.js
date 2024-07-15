@@ -25,7 +25,7 @@ function App() {
       {/* </main> */}
 
       <React.Fragment>
-        <div className="hero_area">
+        <div className="hero_area" style={{ marginBottom: "3rem" }}>
           <Header></Header>
           <Routes>
             <Route path="/" element={<Home />} />

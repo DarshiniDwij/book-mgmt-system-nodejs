@@ -249,5 +249,10 @@ body {
   font-weight: bold; /* Example styling */
 }
   
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
   
   

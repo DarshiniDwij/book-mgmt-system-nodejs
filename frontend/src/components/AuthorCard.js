@@ -38,7 +38,7 @@ const AuthorCard = ({ author, onHandleDeleteCallBack, handleCallBack }) => {
   //   window.location.href = `/singleAuthor/${author}`;
   // };
   return (
-    <div>
+    <div style={{ height: "16rem" }}>
       {author && (
         <Card
           style={{
@@ -51,7 +51,7 @@ const AuthorCard = ({ author, onHandleDeleteCallBack, handleCallBack }) => {
         >
           <Card.Img variant="top" src={imageUrl} />
           <Card.Body>
-            <Card.Title>{author.name}</Card.Title>
+            <Card.Title className="auth-card-title">{author.name}</Card.Title>
           </Card.Body>
 
           {showFooter && (

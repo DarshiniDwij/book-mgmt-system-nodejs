@@ -82,7 +82,7 @@ const ProductCard = ({
   };
 
   return (
-    <div>
+    <div style={{ height: "20rem" }}>
       {book && (
         <Card
           style={{

@@ -252,6 +252,11 @@ const BookStore = () => {
                       <li
                         key={author.author_id}
                         onClick={() => handleAuthorClick(author.author_id)}
+                        className={
+                          selectedAuthor === author.author_id
+                            ? "highlighted"
+                            : ""
+                        }
                       >
                         {author.name}
                       </li>
@@ -280,6 +285,9 @@ const BookStore = () => {
                     <li
                       key={genre.genre_id}
                       onClick={() => handleGenreClick(genre.genre_id)}
+                      className={
+                        selectedGenre === genre.genre_id ? "highlighted" : ""
+                      }
                     >
                       {genre.genre_name}
                     </li>
@@ -303,9 +311,24 @@ const BookStore = () => {
                   <li onClick={() => handleLangClick(null)}>
                     <b>All</b>
                   </li>
-                  <li onClick={() => handleLangClick("Kannada")}>Kannada</li>
-                  <li onClick={() => handleLangClick("English")}>English</li>
-                  <li onClick={() => handleLangClick("other")}>Other</li>
+                  <li
+                    onClick={() => handleLangClick("Kannada")}
+                    className={selectedLang === "Kannada" ? "highlighted" : ""}
+                  >
+                    Kannada
+                  </li>
+                  <li
+                    onClick={() => handleLangClick("English")}
+                    className={selectedLang === "English" ? "highlighted" : ""}
+                  >
+                    English
+                  </li>
+                  <li
+                    onClick={() => handleLangClick("other")}
+                    className={selectedLang === "other" ? "highlighted" : ""}
+                  >
+                    Other
+                  </li>
                 </ul>
               </div>
 

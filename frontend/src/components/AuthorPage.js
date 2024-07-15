@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, Form, InputGroup } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import AuthorCard from "./AuthorCard";
@@ -12,9 +12,29 @@ const AuthorPage = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredAuthor, setFilteredAuthors] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    if (authors) {
+      applyFilters(searchTerm);
+    }
+  }, [authors, searchTerm]);
+
+  const applyFilters = (searchTerm) => {
+    if (!authors) return;
+    let filtered = authors.filter((author) => {
+      return (
+        searchTerm === "" ||
+        author.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredAuthors(filtered);
+    //setBooks(filtered);
+  };
 
   const handleShowToast = (message, variant) => {
     setToastMessage(message);
@@ -107,13 +127,40 @@ const AuthorPage = () => {
       <Container>
         <Row>
           <Col md={3}>
+            <div style={{ marginTop: "5rem", marginBottom: "4rem" }}>
+              <h5 style={{ textAlign: "left" }}>Search By</h5>
+              <div
+                className="filter-divider"
+                style={{ marginBottom: "5px", alignItems: "left" }}
+              >
+                <hr />
+              </div>
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+                <Form.Control
+                  placeholder="Author name"
+                  aria-label="Author"
+                  aria-describedby="basic-book"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </InputGroup>
+            </div>
+            <div
+              className="filter-divider"
+              style={{
+                marginBottom: "5px",
+                alignItems: "left",
+              }}
+            >
+              <hr />
+            </div>
             <Button
               className="w-100 custom-borderless-btn"
               style={{
                 backgroundColor: "#0E345A",
                 border: "none",
                 width: "200px",
-                marginTop: "150px",
+                marginTop: "50px",
               }}
               onClick={() => handleAuthorOffCanvas()}
             >
@@ -138,7 +185,7 @@ const AuthorPage = () => {
 
               <div>
                 <div className="book-list">
-                  {authors.map((author, index) => (
+                  {filteredAuthor.map((author, index) => (
                     <AuthorCard
                       key={index}
                       author={author}
